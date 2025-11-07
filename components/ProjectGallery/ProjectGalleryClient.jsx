@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from "react";
 import Image from "next/image";
@@ -49,15 +49,20 @@ const ProjectGalleryClient = ({ projectId, projectTitle, className = "" }) => {
   // Filter out invalid images and get up to 6 images
   const validImages = projectImages
     ? projectImages
-        .map(img => {
+        .map((img) => {
           // Remove surrounding quotes if they exist
-          const url = img.image_url ? img.image_url.replace(/^"|"$/g, '') : '';
+          const url = img.image_url ? img.image_url.replace(/^"|"$/g, "") : "";
           return url;
         })
-        .filter(url => url && typeof url === 'string' && url.trim() !== '' && (url.startsWith('http') || url.startsWith('/')))
+        .filter(
+          (url) =>
+            url &&
+            typeof url === "string" &&
+            url.trim() !== "" &&
+            (url.startsWith("http") || url.startsWith("/")),
+        )
         .slice(0, 6)
     : [];
-
 
   return (
     <div className={`space-y-4 ${className} scroll-reveal`}>
@@ -68,37 +73,37 @@ const ProjectGalleryClient = ({ projectId, projectTitle, className = "" }) => {
         Images de l'Impact
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {validImages.length > 0 ? (
-          validImages.map((imageSrc, index) => (
-            <div
-              key={index}
-              className="relative aspect-square rounded-xl overflow-hidden shadow-md group transition duration-300 hover:scale-[1.02] hover:shadow-xl scroll-reveal"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <Image
-                src={imageSrc}
-                alt={`${projectTitle} photo ${index + 1}`}
-                fill
-                sizes="(max-width: 768px) 50vw, 33vw"
-                style={{ objectFit: "cover" }}
-                className="transition duration-300 group-hover:scale-105"
-              />
+        {validImages.length > 0
+          ? validImages.map((imageSrc, index) => (
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ backgroundColor: "#6495ED1A" }}
-              ></div>
-            </div>
-          ))
-        ) : (
-          Array.from({ length: Math.min(6, 3) }).map((_, index) => (
-            <div
-              key={index}
-              className="relative aspect-square rounded-xl overflow-hidden shadow-md bg-gray-200 flex items-center justify-center"
-            >
-              <span className="text-gray-500 text-sm">Image non disponible</span>
-            </div>
-          ))
-        )}
+                key={index}
+                className="relative aspect-square rounded-xl overflow-hidden shadow-md group transition duration-300 hover:scale-[1.02] hover:shadow-xl scroll-reveal"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <Image
+                  src={imageSrc}
+                  alt={`${projectTitle} photo ${index + 1}`}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                  className="transition duration-300 group-hover:scale-105"
+                />
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ backgroundColor: "#6495ED1A" }}
+                ></div>
+              </div>
+            ))
+          : Array.from({ length: Math.min(6, 3) }).map((_, index) => (
+              <div
+                key={index}
+                className="relative aspect-square rounded-xl overflow-hidden shadow-md bg-gray-200 flex items-center justify-center"
+              >
+                <span className="text-gray-500 text-sm">
+                  Image non disponible
+                </span>
+              </div>
+            ))}
       </div>
     </div>
   );

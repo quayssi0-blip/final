@@ -1,12 +1,15 @@
-import { NextResponse } from 'next/server';
-import { ProjectsController } from '../../../../../lib/controllers/projects';
+import { NextResponse } from "next/server";
+import { ProjectsController } from "../../../../../lib/controllers/projects";
 
 export async function POST(request, { params }) {
   try {
-    const { data: { user }, error: authError } = await supabaseServer.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseServer.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = params;
@@ -14,7 +17,7 @@ export async function POST(request, { params }) {
     const image = await ProjectsController.addProjectImage(user, id, body);
     return NextResponse.json(image, { status: 201 });
   } catch (err) {
-    console.error('Error adding project image:', err.message);
+    console.error("Error adding project image:", err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

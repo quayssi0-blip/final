@@ -76,25 +76,27 @@ export default function EditProjectPage() {
       type,
       content: {},
     };
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      content: [...prev.content, newBlock]
+      content: [...prev.content, newBlock],
     }));
   };
 
   const updateContentBlock = (id, updates) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      content: prev.content.map(block =>
-        block.id === id ? { ...block, content: { ...block.content, ...updates } } : block
-      )
+      content: prev.content.map((block) =>
+        block.id === id
+          ? { ...block, content: { ...block.content, ...updates } }
+          : block,
+      ),
     }));
   };
 
   const removeContentBlock = (id) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      content: prev.content.filter(block => block.id !== id)
+      content: prev.content.filter((block) => block.id !== id),
     }));
   };
 
@@ -120,16 +122,17 @@ export default function EditProjectPage() {
         id: params.id,
         title: "E-commerce Platform",
         slug: "ecommerce-platform",
-        description: "A modern e-commerce platform built with React and Node.js",
+        description:
+          "A modern e-commerce platform built with React and Node.js",
         content: [
           {
             id: "1",
             type: "text",
             content: {
               heading: "E-commerce Platform Overview",
-              text: "This project involved building a complete e-commerce solution..."
-            }
-          }
+              text: "This project involved building a complete e-commerce solution...",
+            },
+          },
         ],
         status: "published",
         technologies: "React, Node.js, MongoDB, Stripe",
@@ -147,16 +150,16 @@ export default function EditProjectPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
 
@@ -168,9 +171,9 @@ export default function EditProjectPage() {
         .replace(/\s+/g, "-")
         .replace(/--+/g, "-")
         .trim();
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        slug: generatedSlug
+        slug: generatedSlug,
       }));
     }
   };
@@ -185,7 +188,8 @@ export default function EditProjectPage() {
     if (!formData.slug.trim()) {
       newErrors.slug = "Slug is required";
     } else if (!/^[a-z0-9-]+$/.test(formData.slug)) {
-      newErrors.slug = "Slug can only contain lowercase letters, numbers, and hyphens";
+      newErrors.slug =
+        "Slug can only contain lowercase letters, numbers, and hyphens";
     }
 
     if (!formData.description.trim()) {
@@ -209,7 +213,7 @@ export default function EditProjectPage() {
 
     try {
       // This would be replaced with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       // Success - redirect to projects list
       router.push("/admin/projects");
@@ -221,10 +225,14 @@ export default function EditProjectPage() {
   };
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this project? This action cannot be undone.")) {
+    if (
+      confirm(
+        "Are you sure you want to delete this project? This action cannot be undone.",
+      )
+    ) {
       try {
         // This would be replaced with actual API call
-        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
 
         // Success - redirect to projects list
         router.push("/admin/projects");
@@ -248,7 +256,9 @@ export default function EditProjectPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Edit Project</h1>
-          <p className="text-gray-600">Update project information and content</p>
+          <p className="text-gray-600">
+            Update project information and content
+          </p>
         </div>
         <Link
           href="/admin/projects"
@@ -270,7 +280,10 @@ export default function EditProjectPage() {
 
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Project Title *
             </label>
             <input
@@ -291,7 +304,10 @@ export default function EditProjectPage() {
 
           {/* Slug */}
           <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="slug"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Slug *
             </label>
             <input
@@ -312,7 +328,10 @@ export default function EditProjectPage() {
 
           {/* Status */}
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Status *
             </label>
             <select
@@ -329,7 +348,10 @@ export default function EditProjectPage() {
 
           {/* Client */}
           <div>
-            <label htmlFor="client" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="client"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Client
             </label>
             <input
@@ -345,7 +367,10 @@ export default function EditProjectPage() {
 
           {/* Duration */}
           <div>
-            <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="duration"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Duration
             </label>
             <input
@@ -361,7 +386,10 @@ export default function EditProjectPage() {
 
           {/* Website */}
           <div>
-            <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="website"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Website URL
             </label>
             <input
@@ -377,7 +405,10 @@ export default function EditProjectPage() {
 
           {/* Technologies */}
           <div>
-            <label htmlFor="technologies" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="technologies"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Technologies
             </label>
             <input
@@ -393,7 +424,10 @@ export default function EditProjectPage() {
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Short Description *
             </label>
             <textarea

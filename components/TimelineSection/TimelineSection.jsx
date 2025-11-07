@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Search, Lightbulb, Wrench, BarChart } from "lucide-react";
 import {
@@ -25,7 +25,8 @@ export default function TimelineSection() {
             <div>
               <TimelineTitle>1. Évaluation des Besoins</TimelineTitle>
               <TimelineDescription>
-                Analyse approfondie des besoins réels de la communauté cible pour identifier les problématiques majeures.
+                Analyse approfondie des besoins réels de la communauté cible
+                pour identifier les problématiques majeures.
               </TimelineDescription>
             </div>
           </div>
@@ -39,7 +40,8 @@ export default function TimelineSection() {
             <div>
               <TimelineTitle>2. Conception du Projet</TimelineTitle>
               <TimelineDescription>
-                Développement d'une stratégie adaptée et durable avec l'expertise locale et les partenaires concernés.
+                Développement d'une stratégie adaptée et durable avec
+                l'expertise locale et les partenaires concernés.
               </TimelineDescription>
             </div>
           </div>
@@ -53,7 +55,8 @@ export default function TimelineSection() {
             <div>
               <TimelineTitle>3. Mise en Œuvre</TimelineTitle>
               <TimelineDescription>
-                Exécution rigoureuse et transparente sur le terrain avec suivi continu des progrès.
+                Exécution rigoureuse et transparente sur le terrain avec suivi
+                continu des progrès.
               </TimelineDescription>
             </div>
           </div>
@@ -67,7 +70,8 @@ export default function TimelineSection() {
             <div>
               <TimelineTitle>4. Évaluation & Impact</TimelineTitle>
               <TimelineDescription>
-                Mesure de l'impact effectif et ajustements stratégiques pour une optimisation continue.
+                Mesure de l'impact effectif et ajustements stratégiques pour une
+                optimisation continue.
               </TimelineDescription>
             </div>
           </div>
@@ -80,28 +84,32 @@ export default function TimelineSection() {
           <TimelineItem icon={Search} index={0}>
             <TimelineTitle>1. Évaluation des Besoins</TimelineTitle>
             <TimelineDescription>
-              Analyse approfondie des besoins réels de la communauté cible pour identifier les problématiques majeures.
+              Analyse approfondie des besoins réels de la communauté cible pour
+              identifier les problématiques majeures.
             </TimelineDescription>
           </TimelineItem>
 
           <TimelineItem icon={Lightbulb} index={1}>
             <TimelineTitle>2. Conception du Projet</TimelineTitle>
             <TimelineDescription>
-              Développement d'une stratégie adaptée et durable avec l'expertise locale et les partenaires concernés.
+              Développement d'une stratégie adaptée et durable avec l'expertise
+              locale et les partenaires concernés.
             </TimelineDescription>
           </TimelineItem>
 
           <TimelineItem icon={Wrench} index={2}>
             <TimelineTitle>3. Mise en Œuvre</TimelineTitle>
             <TimelineDescription>
-              Exécution rigoureuse et transparente sur le terrain avec suivi continu des progrès.
+              Exécution rigoureuse et transparente sur le terrain avec suivi
+              continu des progrès.
             </TimelineDescription>
           </TimelineItem>
 
           <TimelineItem icon={BarChart} index={3}>
             <TimelineTitle>4. Évaluation & Impact</TimelineTitle>
             <TimelineDescription>
-              Mesure de l'impact effectif et ajustements stratégiques pour une optimisation continue.
+              Mesure de l'impact effectif et ajustements stratégiques pour une
+              optimisation continue.
             </TimelineDescription>
           </TimelineItem>
         </Timeline>

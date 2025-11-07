@@ -25,20 +25,26 @@ const ImageTextSection = ({
         <div className="space-y-8 order-1 text-left">
           {/* Section Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 border border-blue-200">
-            <span className="text-sm font-semibold tracking-wide" style={{ color: "#6495ED" }}>
+            <span
+              className="text-sm font-semibold tracking-wide"
+              style={{ color: "#6495ED" }}
+            >
               POUR L'AUTONOMIE ET LA DIGNITÉ
             </span>
           </div>
 
           {/* Main Title */}
           <div>
-            <h2 className="text-3xl lg:text-4xl font-bold leading-tight" style={{ color: "#333333" }}>
+            <h2 className="text-3xl lg:text-4xl font-bold leading-tight text-blue-600">
               {title}
             </h2>
           </div>
 
           {/* Subtitle */}
-          <div className="text-base leading-relaxed" style={{ color: "#666666" }}>
+          <div
+            className="text-base leading-relaxed"
+            style={{ color: "#666666" }}
+          >
             {subtitle}
           </div>
 
@@ -47,11 +53,11 @@ const ImageTextSection = ({
             <div className="space-y-4">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start gap-3">
-                  <div
-                    className="flex-shrink-0 w-2 h-2 rounded-full mt-3"
-                    style={{ backgroundColor: "#6495ED" }}
-                  ></div>
-                  <p className="text-sm leading-relaxed" style={{ color: "#555555" }}>
+                  <div className="flex-shrink-0 bg-green-600 w-2 h-2 rounded-full mt-3"></div>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "#555555" }}
+                  >
                     {feature}
                   </p>
                 </div>
@@ -73,7 +79,12 @@ const ImageTextSection = ({
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
               </svg>
             </a>
           </div>

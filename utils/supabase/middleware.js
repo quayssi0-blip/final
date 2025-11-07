@@ -14,14 +14,14 @@
  * // then use supabase for queries
  */
 
-import supabaseServer from './server';
+import supabaseServer from "./server";
 
 function _getCookieHeader(req) {
   // Support both Fetch Request-like and Node IncomingMessage-like headers
   if (!req) return undefined;
-  if (typeof req.get === 'function') return req.get('cookie');
+  if (typeof req.get === "function") return req.get("cookie");
   if (req.headers) {
-    if (typeof req.headers.get === 'function') return req.headers.get('cookie');
+    if (typeof req.headers.get === "function") return req.headers.get("cookie");
     return req.headers.cookie || req.headers.Cookie;
   }
   return undefined;
@@ -30,11 +30,11 @@ function _getCookieHeader(req) {
 function parseCookies(cookieHeader) {
   const cookies = {};
   if (!cookieHeader) return cookies;
-  const parts = cookieHeader.split(';');
+  const parts = cookieHeader.split(";");
   for (const part of parts) {
-    const [k, ...v] = part.split('=');
+    const [k, ...v] = part.split("=");
     if (!k) continue;
-    cookies[k.trim()] = decodeURIComponent((v || []).join('=').trim());
+    cookies[k.trim()] = decodeURIComponent((v || []).join("=").trim());
   }
   return cookies;
 }
@@ -42,8 +42,12 @@ function parseCookies(cookieHeader) {
 export function getTokenFromRequest(req) {
   // 1) Authorization: Bearer <token>
   try {
-    const authHeader = req?.headers?.authorization || (typeof req.get === 'function' && req.get('authorization')) || (req?.headers && req.headers.Authorization) || undefined;
-    if (authHeader && typeof authHeader === 'string') {
+    const authHeader =
+      req?.headers?.authorization ||
+      (typeof req.get === "function" && req.get("authorization")) ||
+      (req?.headers && req.headers.Authorization) ||
+      undefined;
+    if (authHeader && typeof authHeader === "string") {
       const m = authHeader.match(/^Bearer (.+)$/i);
       if (m) return m[1];
     }
@@ -55,7 +59,12 @@ export function getTokenFromRequest(req) {
   const cookieHeader = _getCookieHeader(req);
   const cookies = parseCookies(cookieHeader);
   // Common cookie names that may contain an access token depending on your setup
-  return cookies['sb-access-token'] || cookies['supabase-auth-token'] || cookies['access_token'] || null;
+  return (
+    cookies["sb-access-token"] ||
+    cookies["supabase-auth-token"] ||
+    cookies["access_token"] ||
+    null
+  );
 }
 
 export function getSupabaseFromRequest(req) {

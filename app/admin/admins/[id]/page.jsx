@@ -35,16 +35,16 @@ export default function EditAdminPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
   };
@@ -77,7 +77,7 @@ export default function EditAdminPage() {
 
     try {
       // This would be replaced with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       // Success - redirect to admins list
       router.push("/admin/admins");
@@ -89,10 +89,14 @@ export default function EditAdminPage() {
   };
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this admin? This action cannot be undone.")) {
+    if (
+      confirm(
+        "Are you sure you want to delete this admin? This action cannot be undone.",
+      )
+    ) {
       try {
         // This would be replaced with actual API call
-        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
 
         // Success - redirect to admins list
         router.push("/admin/admins");
@@ -115,8 +119,12 @@ export default function EditAdminPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Administrator</h1>
-          <p className="text-gray-600">Update administrator information and permissions</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Edit Administrator
+          </h1>
+          <p className="text-gray-600">
+            Update administrator information and permissions
+          </p>
         </div>
         <Link
           href="/admin/admins"
@@ -138,7 +146,10 @@ export default function EditAdminPage() {
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Email Address *
             </label>
             <input
@@ -159,7 +170,10 @@ export default function EditAdminPage() {
 
           {/* Role */}
           <div>
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Role *
             </label>
             <select

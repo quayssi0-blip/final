@@ -34,7 +34,7 @@ export default function BlogPost({ params }) {
   const { blogs: allBlogs, isLoading, isError } = useBlogs();
 
   // Find blog by slug
-  const blog = allBlogs?.find(b => b.slug === slug);
+  const blog = allBlogs?.find((b) => b.slug === slug);
 
   if (!isLoading && !blog) {
     notFound();
@@ -42,7 +42,10 @@ export default function BlogPost({ params }) {
 
   if (isLoading) {
     return (
-      <main style={{ backgroundColor: "#FAFAFA" }} className="min-h-screen flex items-center justify-center">
+      <main
+        style={{ backgroundColor: "#FAFAFA" }}
+        className="min-h-screen flex items-center justify-center"
+      >
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p>Chargement de l'article...</p>
@@ -53,9 +56,14 @@ export default function BlogPost({ params }) {
 
   if (isError) {
     return (
-      <main style={{ backgroundColor: "#FAFAFA" }} className="min-h-screen flex items-center justify-center">
+      <main
+        style={{ backgroundColor: "#FAFAFA" }}
+        className="min-h-screen flex items-center justify-center"
+      >
         <div className="text-center">
-          <p className="text-red-600 mb-4">Erreur lors du chargement de l'article</p>
+          <p className="text-red-600 mb-4">
+            Erreur lors du chargement de l'article
+          </p>
           <Link href="/blogs" className="text-blue-600 hover:underline">
             Retour aux articles
           </Link>
@@ -65,9 +73,10 @@ export default function BlogPost({ params }) {
   }
 
   // Get related blogs (same category, excluding current blog)
-  const relatedBlogs = allBlogs
-    ?.filter((b) => b.category === blog.category && b.slug !== slug)
-    .slice(0, 2) || [];
+  const relatedBlogs =
+    allBlogs
+      ?.filter((b) => b.category === blog.category && b.slug !== slug)
+      .slice(0, 2) || [];
 
   return (
     <main style={{ backgroundColor: BACKGROUND }}>
@@ -77,7 +86,11 @@ export default function BlogPost({ params }) {
           <UnifiedHero
             title={blog.title}
             subtitle={blog.excerpt}
-            images={[blog.image || "/projects/foundation1.jpg", "/projects/foundation2.jpg", "/projects/foundation3.jpg"]}
+            images={[
+              blog.image || "/projects/foundation1.jpg",
+              "/projects/foundation2.jpg",
+              "/projects/foundation3.jpg",
+            ]}
           />
 
           {/* Featured Image */}
@@ -149,14 +162,19 @@ export default function BlogPost({ params }) {
                   </div>
                 </div>
               </div>
-            {/* Main Content */}
-            <div className="md:col-span-2">
-              <div className="bg-white rounded-xl shadow-2xl p-8 border border-gray-100 relative overflow-hidden card-lift">
-                <div className="relative z-10">
-                  {/* Blog content styles - Moved to globals.css */}
+              {/* Main Content */}
+              <div className="md:col-span-2">
+                <div className="bg-white rounded-xl shadow-2xl p-8 border border-gray-100 relative overflow-hidden card-lift">
+                  <div className="relative z-10">
+                    {/* Blog content styles - Moved to globals.css */}
                     <div
                       className="blog-content mb-6 leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: blog.content?.replace(/<p>/g, '<p class="mb-6">') }}
+                      dangerouslySetInnerHTML={{
+                        __html: blog.content?.replace(
+                          /<p>/g,
+                          '<p class="mb-6">',
+                        ),
+                      }}
                     />
                   </div>
                   {/* Tags */}

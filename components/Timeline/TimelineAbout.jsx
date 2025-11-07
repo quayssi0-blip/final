@@ -11,7 +11,7 @@ const SECONDARY_COLOR = "#606060";
 
 // --- Enhanced Blueprint Animations and Styles ---
 const BlueprintAnimationStyles = () => (
-    <style jsx global>{`
+  <style jsx global>{`
       // --- Keyframe Animations ---
 
       // Fade in with a subtle upward movement
@@ -70,30 +70,30 @@ const BlueprintAnimationStyles = () => (
  * It displays a curved line on desktops and a straight vertical line on mobile.
  */
 export const TimelineAbout = ({ children }) => (
-    <div className="relative max-w-6xl px-4 mx-auto mt-12 lg:mt-20">
-        <BlueprintAnimationStyles />
+  <div className="relative max-w-6xl px-4 mx-auto mt-12 lg:mt-20">
+    <BlueprintAnimationStyles />
 
-        {/* Curved Dotted Line for Desktop */}
-        <div className="absolute inset-x-0 hidden top-8 md:block">
-            <img
-                className="w-full"
-                src="https://cdn.rareblocks.xyz/collection/celebration/images/steps/2/curved-dotted-line.svg"
-                alt="Timeline connector"
-                style={{ filter: 'hue-rotate(200deg) brightness(0.8)' }}
-            />
-        </div>
-
-        {/* Vertical Line for Mobile */}
-        <div 
-            className="absolute w-px h-full transform -translate-x-1/2 bg-gray-200 left-1/2 md:hidden"
-            style={{ top: '2rem', bottom: '2rem' }}
-        ></div>
-
-        {/* Grid layout for timeline items */}
-        <div className="relative grid grid-cols-1 gap-y-16 md:grid-cols-4 md:gap-x-12">
-            {children}
-        </div>
+    {/* Curved Dotted Line for Desktop */}
+    <div className="absolute inset-x-0 hidden top-8 md:block">
+      <img
+        className="w-full"
+        src="https://cdn.rareblocks.xyz/collection/celebration/images/steps/2/curved-dotted-line.svg"
+        alt="Timeline connector"
+        style={{ filter: "hue-rotate(200deg) brightness(0.8)" }}
+      />
     </div>
+
+    {/* Vertical Line for Mobile */}
+    <div
+      className="absolute w-px h-full transform -translate-x-1/2 bg-gray-200 left-1/2 md:hidden"
+      style={{ top: "2rem", bottom: "2rem" }}
+    ></div>
+
+    {/* Grid layout for timeline items */}
+    <div className="relative grid grid-cols-1 gap-y-16 md:grid-cols-4 md:gap-x-12">
+      {children}
+    </div>
+  </div>
 );
 
 // --- Timeline Item Components ---
@@ -103,32 +103,35 @@ export const TimelineAbout = ({ children }) => (
  * Each item contains a step number, a title, a date, and a description.
  */
 export const TimelineItemAbout = ({ children, index }) => {
-    const stepNumber = index + 1;
+  const stepNumber = index + 1;
 
-    return (
-        <div 
-            className="relative text-center animate-fade-in group"
-            style={{ animationDelay: `${index * 0.15}s` }}
+  return (
+    <div
+      className="relative text-center animate-fade-in group"
+      style={{ animationDelay: `${index * 0.15}s` }}
+    >
+      {/* Step Number Circle */}
+      <div
+        className="flex items-center justify-center w-16 h-16 mx-auto mb-8 bg-white border-2 rounded-full shadow-lg animate-pulse-highlight"
+        style={{
+          borderColor: `${ACCENT_COLOR}40`,
+          animationDelay: `${index * 0.15 + 0.2}s`,
+        }}
+      >
+        <span
+          className="text-2xl font-semibold"
+          style={{ color: ACCENT_COLOR }}
         >
-            {/* Step Number Circle */}
-            <div 
-                className="flex items-center justify-center w-16 h-16 mx-auto mb-8 bg-white border-2 rounded-full shadow-lg animate-pulse-highlight"
-                style={{
-                    borderColor: `${ACCENT_COLOR}40`,
-                    animationDelay: `${index * 0.15 + 0.2}s`,
-                }}
-            >
-                <span className="text-2xl font-semibold" style={{ color: ACCENT_COLOR }}>
-                    {stepNumber}
-                </span>
-            </div>
+          {stepNumber}
+        </span>
+      </div>
 
-            {/* Content Card */}
-            <div className="p-6 transition-colors bg-white rounded-lg card-lift">
-                {children}
-            </div>
-        </div>
-    );
+      {/* Content Card */}
+      <div className="p-6 transition-colors bg-white rounded-lg card-lift">
+        {children}
+      </div>
+    </div>
+  );
 };
 
 /**
@@ -137,11 +140,12 @@ export const TimelineItemAbout = ({ children, index }) => {
  */
 export const TimelineTimeAbout = ({ children }) => (
   <div className="flex justify-center mb-5">
-      <div className="flex items-center px-4 py-2 space-x-2 text-sm font-semibold rounded-full bg-blue-50"
-        style={{ border: `1px solid ${ACCENT_COLOR}30` }}
-      >
-        <Calendar className="w-4 h-4" style={{ color: ACCENT_COLOR }} />
-        <span style={{ color: ACCENT_COLOR }}>{children}</span>
+    <div
+      className="flex items-center px-4 py-2 space-x-2 text-sm font-semibold rounded-full bg-blue-50"
+      style={{ border: `1px solid ${ACCENT_COLOR}30` }}
+    >
+      <Calendar className="w-4 h-4" style={{ color: ACCENT_COLOR }} />
+      <span style={{ color: ACCENT_COLOR }}>{children}</span>
     </div>
   </div>
 );

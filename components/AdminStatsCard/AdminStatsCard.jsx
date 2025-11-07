@@ -55,21 +55,16 @@ const AdminStatsCard = ({ title, value, type }) => {
   }
 
   return (
-    <div className="bg-gray-800 text-white p-6 rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] border border-gray-700">
+    <div className="bg-blue-600 p-6 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border border-blue-500">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-3xl font-bold mb-2">
-            {value}
-          </p>
-          <h3 className="text-sm font-semibold opacity-90 uppercase tracking-wide">
+          <p className="text-3xl font-bold mb-2 text-white">{value}</p>
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wide opacity-90">
             {title}
           </h3>
         </div>
-        <div
-          className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: bgColor }}
-        >
-          <Icon className="h-8 w-8" style={{ color: iconColor }} />
+        <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
+          <Icon className="h-6 w-6 text-white opacity-80" />
         </div>
       </div>
     </div>

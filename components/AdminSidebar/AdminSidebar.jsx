@@ -102,7 +102,9 @@ const AdminSidebar = ({ user }) => {
                   )}
                   <span
                     className={`mr-4 transition-all duration-300 ${
-                      isActive ? "text-white" : "text-blue-500 group-hover:scale-110"
+                      isActive
+                        ? "text-white"
+                        : "text-blue-500 group-hover:scale-110"
                     }`}
                   >
                     {item.icon}

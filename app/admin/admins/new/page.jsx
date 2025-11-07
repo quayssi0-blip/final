@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
+import { useAdmins } from "../../../../hooks/useAdmins";
 
 export default function NewAdminPage() {
   const router = useRouter();
+  const { createAdmin } = useAdmins();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -18,16 +20,16 @@ export default function NewAdminPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
   };
@@ -69,13 +71,17 @@ export default function NewAdminPage() {
     setLoading(true);
 
     try {
-      // This would be replaced with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
+      // Prepare admin data (remove confirmPassword and extra fields)
+      const { confirmPassword, ...adminData } = formData;
+      
+      // Use the hook to create admin
+      await createAdmin(adminData);
+      
       // Success - redirect to admins list
       router.push("/admin/admins");
     } catch (error) {
-      setErrors({ submit: "Failed to create admin. Please try again." });
+      console.error("Error creating admin:", error.message);
+      setErrors({ submit: error.message });
     } finally {
       setLoading(false);
     }
@@ -86,7 +92,9 @@ export default function NewAdminPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Add New Administrator</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Add New Administrator
+          </h1>
           <p className="text-gray-600">Create a new administrator account</p>
         </div>
         <Link
@@ -109,7 +117,10 @@ export default function NewAdminPage() {
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Email Address *
             </label>
             <input
@@ -130,7 +141,10 @@ export default function NewAdminPage() {
 
           {/* Role */}
           <div>
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Role *
             </label>
             <select
@@ -153,7 +167,10 @@ export default function NewAdminPage() {
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Password *
             </label>
             <input
@@ -174,7 +191,10 @@ export default function NewAdminPage() {
 
           {/* Confirm Password */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Confirm Password *
             </label>
             <input
@@ -189,7 +209,9 @@ export default function NewAdminPage() {
               placeholder="Confirm password"
             />
             {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+              <p className="mt-1 text-sm text-red-600">
+                {errors.confirmPassword}
+              </p>
             )}
           </div>
 

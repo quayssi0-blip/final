@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Custom hook for Intersection Observer with advanced lazy loading control
@@ -12,8 +12,8 @@ import { useEffect, useRef, useState } from 'react';
  */
 const useIntersectionObserver = ({
   threshold = 0.1,
-  rootMargin = '50px',
-  triggerOnce = true
+  rootMargin = "50px",
+  triggerOnce = true,
 } = {}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasIntersected, setHasIntersected] = useState(false);
@@ -35,7 +35,7 @@ const useIntersectionObserver = ({
       {
         threshold,
         rootMargin,
-      }
+      },
     );
 
     observer.observe(element);

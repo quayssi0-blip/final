@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
-import { ProjectImagesController } from '../../../lib/controllers/projectImages';
+import { NextResponse } from "next/server";
+import { ProjectImagesController } from "../../../lib/controllers/projectImages";
 
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
-    const projectId = searchParams.get('projectId');
+    const projectId = searchParams.get("projectId");
 
     let images;
     if (projectId) {
@@ -17,7 +17,7 @@ export async function GET(request) {
 
     return NextResponse.json(images);
   } catch (err) {
-    console.error('Error fetching project images:', err.message);
+    console.error("Error fetching project images:", err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

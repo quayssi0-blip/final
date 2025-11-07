@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Container from "@/components/Container/Container";
 import SectionHeader from "@/components/SectionHeader/SectionHeader";
-import UnifiedHero from "@/components/UnifiedHero";
+import UnifiedHero from "@/components/UnifiedHero/UnifiedHero";
 import ProjectGallery from "@/components/ProjectGallery/ProjectGallery";
 import { ProjectsController } from "@/lib/controllers/projects";
 
@@ -20,12 +20,13 @@ export default async function ProjectGalleryPage({ params }) {
 
   // Get all project images for this project
   const projectImages = project.project_images || [];
-  const galleryUrls = projectImages.map(img => {
-    // Remove surrounding quotes if they exist
-    const url = img.image_url ? img.image_url.replace(/^"|"$/g, '') : '';
-    return url;
-  }).filter(url => url && url.trim() !== '');
-
+  const galleryUrls = projectImages
+    .map((img) => {
+      // Remove surrounding quotes if they exist
+      const url = img.image_url ? img.image_url.replace(/^"|"$/g, "") : "";
+      return url;
+    })
+    .filter((url) => url && url.trim() !== "");
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FAFAFA" }}>
@@ -33,12 +34,14 @@ export default async function ProjectGalleryPage({ params }) {
       <UnifiedHero
         title={`Galerie Photos - ${project.title}`}
         subtitle="Découvrez tous les moments capturés lors de la réalisation de ce projet."
-        images={[project.image || "/projects/foundation1.jpg", "/projects/foundation2.jpg", "/projects/foundation3.jpg"]}
+        images={[
+          project.image || "/projects/foundation1.jpg",
+          "/projects/foundation2.jpg",
+          "/projects/foundation3.jpg",
+        ]}
       />
 
       <Container className="p-20">
-
-
         {/* Gallery Section */}
         {galleryUrls.length > 0 ? (
           <section className="mb-16">
@@ -52,9 +55,12 @@ export default async function ProjectGalleryPage({ params }) {
           <section className="text-center py-16">
             <div className="bg-white rounded-lg shadow-md p-12 max-w-md mx-auto">
               <div className="text-6xl mb-4">📷</div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-800">Aucune photo disponible</h3>
+              <h3 className="text-xl font-semibold mb-2 text-gray-800">
+                Aucune photo disponible
+              </h3>
               <p className="text-gray-600">
-                La galerie de ce projet sera bientôt enrichie de nouvelles photos.
+                La galerie de ce projet sera bientôt enrichie de nouvelles
+                photos.
               </p>
             </div>
           </section>
@@ -68,7 +74,7 @@ export default async function ProjectGalleryPage({ params }) {
             style={{
               backgroundColor: ACCENT,
               color: "white",
-              textDecoration: "none"
+              textDecoration: "none",
             }}
           >
             ← Retour au projet

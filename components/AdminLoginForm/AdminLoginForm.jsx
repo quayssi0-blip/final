@@ -13,7 +13,17 @@ const AdminLoginForm = ({ error, isLoading, onSubmit }) => (
         )}
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-6">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          onSubmit({
+            email: formData.get("email"),
+            password: formData.get("password"),
+          });
+        }}
+        className="space-y-6"
+      >
         <div>
           <label
             className="block text-sm font-medium mb-1"

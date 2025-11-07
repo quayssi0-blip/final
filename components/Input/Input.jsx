@@ -4,7 +4,16 @@ import React from "react";
  * Input Component with Accent Focus Styling.
  * Uses a global CSS injection to ensure the focus ring/border is ACCENT color.
  */
-const Input = ({ label, name, required, placeholder, type = "text", min }) => (
+const Input = ({
+  label,
+  name,
+  required,
+  placeholder,
+  type = "text",
+  min,
+  value,
+  onChange,
+}) => (
   <div className="space-y-2">
     <label
       htmlFor={name}
@@ -20,6 +29,8 @@ const Input = ({ label, name, required, placeholder, type = "text", min }) => (
       required={required}
       placeholder={placeholder}
       min={min}
+      value={value}
+      onChange={onChange}
       // Added 'contact-form-input' class for global focus styling
       className="contact-form-input p-3 border border-gray-300 rounded-lg focus:ring-2 block w-full transition duration-150 shadow-sm text-lg"
       style={{ color: "#333333" }}

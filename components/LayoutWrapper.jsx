@@ -6,14 +6,12 @@ import Footer from "@/components/Footer.jsx";
 
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
-  const isAdminRoute = pathname.startsWith('/admin');
+  const isAdminRoute = pathname.startsWith("/admin");
 
   return (
     <>
       {!isAdminRoute && <Navbar />}
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
       {!isAdminRoute && <Footer />}
     </>
   );

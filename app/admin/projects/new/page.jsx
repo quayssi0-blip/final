@@ -74,25 +74,27 @@ export default function NewProjectPage() {
       type,
       content: {},
     };
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      content: [...prev.content, newBlock]
+      content: [...prev.content, newBlock],
     }));
   };
 
   const updateContentBlock = (id, updates) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      content: prev.content.map(block =>
-        block.id === id ? { ...block, content: { ...block.content, ...updates } } : block
-      )
+      content: prev.content.map((block) =>
+        block.id === id
+          ? { ...block, content: { ...block.content, ...updates } }
+          : block,
+      ),
     }));
   };
 
   const removeContentBlock = (id) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      content: prev.content.filter(block => block.id !== id)
+      content: prev.content.filter((block) => block.id !== id),
     }));
   };
 
@@ -112,16 +114,16 @@ export default function NewProjectPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
 
@@ -133,9 +135,9 @@ export default function NewProjectPage() {
         .replace(/\s+/g, "-")
         .replace(/--+/g, "-")
         .trim();
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        slug: generatedSlug
+        slug: generatedSlug,
       }));
     }
   };
@@ -150,7 +152,8 @@ export default function NewProjectPage() {
     if (!formData.slug.trim()) {
       newErrors.slug = "Slug is required";
     } else if (!/^[a-z0-9-]+$/.test(formData.slug)) {
-      newErrors.slug = "Slug can only contain lowercase letters, numbers, and hyphens";
+      newErrors.slug =
+        "Slug can only contain lowercase letters, numbers, and hyphens";
     }
 
     if (!formData.description.trim()) {
@@ -174,7 +177,7 @@ export default function NewProjectPage() {
 
     try {
       // This would be replaced with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       // Success - redirect to projects list
       router.push("/admin/projects");
@@ -213,7 +216,10 @@ export default function NewProjectPage() {
 
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Project Title *
             </label>
             <input
@@ -234,7 +240,10 @@ export default function NewProjectPage() {
 
           {/* Slug */}
           <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="slug"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Slug *
             </label>
             <input
@@ -255,7 +264,10 @@ export default function NewProjectPage() {
 
           {/* Status */}
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Status *
             </label>
             <select
@@ -272,7 +284,10 @@ export default function NewProjectPage() {
 
           {/* Client */}
           <div>
-            <label htmlFor="client" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="client"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Client
             </label>
             <input
@@ -288,7 +303,10 @@ export default function NewProjectPage() {
 
           {/* Duration */}
           <div>
-            <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="duration"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Duration
             </label>
             <input
@@ -304,7 +322,10 @@ export default function NewProjectPage() {
 
           {/* Website */}
           <div>
-            <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="website"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Website URL
             </label>
             <input
@@ -320,7 +341,10 @@ export default function NewProjectPage() {
 
           {/* Technologies */}
           <div>
-            <label htmlFor="technologies" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="technologies"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Technologies
             </label>
             <input
@@ -336,7 +360,10 @@ export default function NewProjectPage() {
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Short Description *
             </label>
             <textarea

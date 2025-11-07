@@ -12,7 +12,7 @@ import {
   Award,
   Clock,
   Lightbulb,
-  Wrench
+  Wrench,
 } from "lucide-react";
 
 // Import extracted components
@@ -145,19 +145,19 @@ export default function AboutUs() {
             content={
               <>
                 <p className="mb-4">
-                  Fondée en **1992** au Maroc, la Fondation Assalam est née d'une
-                  volonté profonde de **solidarité** et d'**entraide**. Nos
-                  premières initiatives locales visaient à améliorer les
+                  Fondée en **1992** au Maroc, la Fondation Assalam est née
+                  d'une volonté profonde de **solidarité** et d'**entraide**.
+                  Nos premières initiatives locales visaient à améliorer les
                   conditions de vie des familles les plus vulnérables. L'ONG a
                   rapidement pris de l'ampleur en s'appuyant sur l'engagement de
                   bénévoles.
                 </p>
                 <p>
-                  Aujourd'hui, avec plus de **36 sections** à travers le Royaume,
-                  nous nous engageons dans l'autonomisation des femmes,
-                  l'éducation des enfants, et le soutien aux étudiants brillants,
-                  transformant chaque défi en une opportunité de dignité et
-                  d'autonomie.
+                  Aujourd'hui, avec plus de **36 sections** à travers le
+                  Royaume, nous nous engageons dans l'autonomisation des femmes,
+                  l'éducation des enfants, et le soutien aux étudiants
+                  brillants, transformant chaque défi en une opportunité de
+                  dignité et d'autonomie.
                 </p>
               </>
             }
@@ -173,21 +173,24 @@ export default function AboutUs() {
 
           <div className="relative py-20 px-8 rounded-3xl border border-white/50">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4" style={{ color: ACCENT }}>
+              <h2 className="text-3xl font-bold mb-4 text-blue-600">
                 Les Étapes de Notre Engagement
               </h2>
               <p className="max-w-2xl mx-auto" style={{ color: DARK_TEXT }}>
-                Découvrez les étapes clés qui ont marqué le parcours de la Fondation
-                Assalam pour le Développement Social.
+                Découvrez les étapes clés qui ont marqué le parcours de la
+                Fondation Assalam pour le Développement Social.
               </p>
             </div>
 
             <TimelineAbout>
               <TimelineItemAbout index={0} icon="Users" position="left">
                 <TimelineTimeAbout>1992</TimelineTimeAbout>
-                <TimelineTitleAbout>Création de la Fondation Assalam au Maroc.</TimelineTitleAbout>
+                <TimelineTitleAbout>
+                  Création de la Fondation Assalam au Maroc.
+                </TimelineTitleAbout>
                 <TimelineDescriptionAbout>
-                  Lancement de l'organisation caritative nationale marocaine, reposant sur le volontariat et la solidarité.
+                  Lancement de l'organisation caritative nationale marocaine,
+                  reposant sur le volontariat et la solidarité.
                 </TimelineDescriptionAbout>
               </TimelineItemAbout>
 
@@ -195,23 +198,30 @@ export default function AboutUs() {
                 <TimelineTimeAbout>2010</TimelineTimeAbout>
                 <TimelineTitleAbout>Expansion Nationale</TimelineTitleAbout>
                 <TimelineDescriptionAbout>
-                  La Fondation étend sa présence avec de nouvelles sections pour couvrir davantage de régions vulnérables du Royaume.
+                  La Fondation étend sa présence avec de nouvelles sections pour
+                  couvrir davantage de régions vulnérables du Royaume.
                 </TimelineDescriptionAbout>
               </TimelineItemAbout>
 
               <TimelineItemAbout index={2} icon="Lightbulb" position="left">
                 <TimelineTimeAbout>2018</TimelineTimeAbout>
-                <TimelineTitleAbout>Lancement des Programmes d'Autonomisation des Femmes</TimelineTitleAbout>
+                <TimelineTitleAbout>
+                  Lancement des Programmes d'Autonomisation des Femmes
+                </TimelineTitleAbout>
                 <TimelineDescriptionAbout>
-                  Inauguration de centres comme Fataer Al Baraka et Nadi Assalam pour l'autonomie économique durable.
+                  Inauguration de centres comme Fataer Al Baraka et Nadi Assalam
+                  pour l'autonomie économique durable.
                 </TimelineDescriptionAbout>
               </TimelineItemAbout>
 
               <TimelineItemAbout index={3} icon="Wrench" position="right">
                 <TimelineTimeAbout>2025</TimelineTimeAbout>
-                <TimelineTitleAbout>Transition Numérique & Lancement de la Nouvelle Plateforme</TimelineTitleAbout>
+                <TimelineTitleAbout>
+                  Transition Numérique & Lancement de la Nouvelle Plateforme
+                </TimelineTitleAbout>
                 <TimelineDescriptionAbout>
-                  Lancement de la nouvelle plateforme web Next.js pour optimiser la transparence et l'impact social.
+                  Lancement de la nouvelle plateforme web Next.js pour optimiser
+                  la transparence et l'impact social.
                 </TimelineDescriptionAbout>
               </TimelineItemAbout>
             </TimelineAbout>
@@ -221,7 +231,7 @@ export default function AboutUs() {
         {/* Notre Mission et Vision */}
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 py-20 rounded-xl shadow-lg">
           <Container className="text-center">
-            <h2 className="text-3xl font-bold mb-4" style={{ color: ACCENT }}>
+            <h2 className="text-3xl font-bold mb-4 text-blue-600">
               Notre Mission et Vision
             </h2>
 
@@ -244,7 +254,7 @@ export default function AboutUs() {
         {/* Impact Section */}
         <div className="bg-blue-50 py-16 rounded-xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4" style={{ color: ACCENT }}>
+            <h2 className="text-3xl font-bold mb-4 text-blue-600">
               Notre Impact et Notre Rayonnement
             </h2>
             <p className="max-w-2xl mx-auto" style={{ color: DARK_TEXT }}>
@@ -253,7 +263,7 @@ export default function AboutUs() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 px-6">
             {impactStats.map((stat, index) => (
               <StatsCard
                 key={index}
@@ -268,10 +278,7 @@ export default function AboutUs() {
         {/* Nos Valeurs */}
         <div className="bg-blue-50 py-16 rounded-xl">
           <Container>
-            <h2
-              className="text-3xl font-bold mb-10 text-center"
-              style={{ color: ACCENT }}
-            >
+            <h2 className="text-3xl font-bold mb-10 text-center text-blue-600">
               Nos Valeurs Fondatrices
             </h2>
 
@@ -294,12 +301,12 @@ export default function AboutUs() {
 
           <div className="relative py-20 px-8 rounded-3xl border border-white/50">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4" style={{ color: ACCENT }}>
+              <h2 className="text-3xl font-bold mb-4 text-blue-600">
                 Nos Partenaires de Confiance
               </h2>
               <p className="max-w-2xl mx-auto" style={{ color: DARK_TEXT }}>
-                Nous collaborons avec des fondations et organisations engagées pour
-                maximiser notre impact social et éducatif.
+                Nous collaborons avec des fondations et organisations engagées
+                pour maximiser notre impact social et éducatif.
               </p>
             </div>
 
@@ -319,10 +326,7 @@ export default function AboutUs() {
         {/* Notre Équipe */}
         <div className="bg-blue-50 py-16 rounded-xl">
           <Container>
-            <h2
-              className="text-3xl font-bold mb-10 text-center"
-              style={{ color: ACCENT }}
-            >
+            <h2 className="text-3xl font-bold mb-10 text-center text-blue-600">
               Notre Équipe Dévouée
             </h2>
 
@@ -370,31 +374,157 @@ export default function AboutUs() {
 
             {/* Decorative separator */}
             <div className="mt-16">
-              <svg className="w-auto h-4 mx-auto text-gray-300" viewBox="0 0 172 16" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 11 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 46 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 81 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 116 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 151 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 18 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 53 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 88 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 123 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 158 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 25 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 60 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 95 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 130 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 165 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 32 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 67 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 102 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.9447 137 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 172 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 39 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 74 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 109 1)" />
-                <line y1="-0.5" x2="18.0278" y2="-0.5" transform="matrix(-0.5547 0.83205 0.83205 0.5547 144 1)" />
+              <svg
+                className="w-auto h-4 mx-auto text-gray-300"
+                viewBox="0 0 172 16"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 11 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 46 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 81 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 116 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 151 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 18 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 53 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 88 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 123 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 158 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 25 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 60 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 95 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 130 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 165 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 32 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 67 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 102 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.9447 137 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 172 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 39 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 74 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 109 1)"
+                />
+                <line
+                  y1="-0.5"
+                  x2="18.0278"
+                  y2="-0.5"
+                  transform="matrix(-0.5547 0.83205 0.83205 0.5547 144 1)"
+                />
               </svg>
             </div>
           </Container>

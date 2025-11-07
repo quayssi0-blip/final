@@ -1,55 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Pencil, Trash2, Plus, Search, Eye } from "lucide-react";
+import StatusBadge from "@/components/StatusBadge";
+import { useBlogs } from "@/hooks/useBlogs";
 
 export default function BlogsPage() {
-  const [blogs, setBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
+  const { blogs, isLoading, isError, deleteBlog } = useBlogs();
 
-  useEffect(() => {
-    // Simulate data fetching
-    const fetchBlogs = async () => {
-      // This would be replaced with actual API calls
-      const mockBlogs = [
-        { id: 1, title: "Getting Started with React", slug: "getting-started-react", status: "published", createdAt: "2023-01-15" },
-        { id: 2, title: "Advanced JavaScript Techniques", slug: "advanced-js-techniques", status: "draft", createdAt: "2023-02-10" },
-        { id: 3, title: "Web Development Best Practices", slug: "web-dev-best-practices", status: "published", createdAt: "2023-03-05" },
-      ];
-      setBlogs(mockBlogs);
-      setLoading(false);
-    };
-
-    fetchBlogs();
-  }, []);
-
-  const filteredBlogs = blogs.filter(blog =>
-    blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    blog.slug.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filtrage côté client pour la recherche
+  const filteredBlogs = blogs?.filter(
+    (blog) =>
+      blog.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.slug?.toLowerCase().includes(searchTerm.toLowerCase()),
+  ) || [];
 
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this blog post?")) {
-      // This would be replaced with actual API call
-      setBlogs(blogs.filter(blog => blog.id !== id));
+      try {
+        await deleteBlog(id);
+      } catch (error) {
+        console.error("Error deleting blog:", error);
+        alert("Failed to delete blog post. Please try again.");
+      }
     }
   };
 
-  const getStatusBadgeColor = (status) => {
-    switch (status) {
-      case "published": return "bg-green-100 text-green-800";
-      case "draft": return "bg-yellow-100 text-yellow-800";
-      case "archived": return "bg-gray-100 text-gray-800";
-      default: return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Failed to load blog posts</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
@@ -112,18 +110,18 @@ export default function BlogsPage() {
               {filteredBlogs.map((blog) => (
                 <tr key={blog.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{blog.title}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {blog.title}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500">{blog.slug}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(blog.status)}`}>
-                      {blog.status}
-                    </span>
+                    <StatusBadge status={blog.status} type="status" />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(blog.createdAt).toLocaleDateString()}
+                    {blog.created_at ? new Date(blog.created_at).toLocaleDateString() : "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">

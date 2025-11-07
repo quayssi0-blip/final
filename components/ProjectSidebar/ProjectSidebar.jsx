@@ -44,7 +44,7 @@ const ProjectSidebar = ({ projectTitle, targetAudience, facilities, slug }) => (
           color: "#6495ED",
           borderColor: "#6495ED",
           boxShadow: "none",
-          textDecoration: "none"
+          textDecoration: "none",
         }}
       >
         📸 Voir la Galerie Complète
@@ -74,7 +74,6 @@ const ProjectSidebar = ({ projectTitle, targetAudience, facilities, slug }) => (
             <span>**Réalisations Concrètes:** {facilities.join(", ")}</span>
           </div>
         )}
-        
       </div>
     </div>
   </aside>

@@ -1,55 +1,66 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Pencil, Trash2, Plus, Search, Eye } from "lucide-react";
+import { useProjects } from "../../../hooks/useProjects";
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
+  const { projects, isLoading, isError, deleteProject } = useProjects();
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate data fetching
-    const fetchProjects = async () => {
-      // This would be replaced with actual API calls
-      const mockProjects = [
-        { id: 1, title: "E-commerce Platform", slug: "ecommerce-platform", status: "published", createdAt: "2023-01-15" },
-        { id: 2, title: "Mobile App Development", slug: "mobile-app-dev", status: "draft", createdAt: "2023-02-10" },
-        { id: 3, title: "Website Redesign", slug: "website-redesign", status: "published", createdAt: "2023-03-05" },
-      ];
-      setProjects(mockProjects);
-      setLoading(false);
-    };
-
-    fetchProjects();
-  }, []);
-
-  const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.slug.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filtrer les projets si les données sont disponibles
+  const filteredProjects = projects?.filter(
+    (project) =>
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.slug.toLowerCase().includes(searchTerm.toLowerCase()),
+  ) || [];
 
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this project?")) {
-      // This would be replaced with actual API call
-      setProjects(projects.filter(project => project.id !== id));
+      try {
+        await deleteProject(id);
+        // La revalidation se fait automatiquement via le hook mutate()
+      } catch (error) {
+        console.error("Failed to delete project:", error);
+        alert("Failed to delete project. Please try again.");
+      }
     }
   };
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
-      case "published": return "bg-green-100 text-green-800";
-      case "draft": return "bg-yellow-100 text-yellow-800";
-      case "archived": return "bg-gray-100 text-gray-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "published":
+        return "bg-green-100 text-green-800";
+      case "draft":
+        return "bg-yellow-100 text-yellow-800";
+      case "archived":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Error loading projects</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
@@ -112,13 +123,17 @@ export default function ProjectsPage() {
               {filteredProjects.map((project) => (
                 <tr key={project.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{project.title}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {project.title}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500">{project.slug}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(project.status)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(project.status)}`}
+                    >
                       {project.status}
                     </span>
                   </td>

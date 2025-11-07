@@ -12,6 +12,7 @@
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.76.1",
+    "aos": "^2.3.4",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
     "jose": "^6.1.0",

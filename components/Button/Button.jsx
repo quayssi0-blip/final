@@ -17,10 +17,7 @@ const Button = ({ children, href, className = "", ...props }) => {
   }
 
   return (
-    <button
-      className={`${baseClasses} ${classes} ${className}`}
-      {...props}
-    >
+    <button className={`${baseClasses} ${classes} ${className}`} {...props}>
       {children}
     </button>
   );

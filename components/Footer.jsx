@@ -114,7 +114,6 @@ export default function Footer() {
                 />
               </div>
               {/* FIX: Use inline style for text color and hover */}
-              
             </Link>
             {/* Body Text: Enhanced readability */}
             <p
@@ -206,13 +205,13 @@ export default function Footer() {
                   style={{ color: WHITE_TEXT_MUTED }}
                   className="group-hover:text-white transition duration-200 text-base leading-relaxed"
                 >
-                  **22 Bd Hassan II, Immeuble 83, 2ème étage, Rabat, Maroc**
+                  **152, boulevard Yacoub El Mansour, 20380 Casablanca, Maroc**
                 </span>
               </li>
               <li className="flex items-center group">
                 <Phone style={IconStyle} />
                 <a
-                  href="tel:0537702346"
+                  href="tel:0522993699"
                   style={{ color: WHITE_TEXT_MUTED }}
                   className="transition-colors text-base group-hover:text-white"
                   onMouseEnter={(e) => (e.target.style.color = ACCENT_BLUE)}
@@ -220,13 +219,13 @@ export default function Footer() {
                     (e.target.style.color = WHITE_TEXT_MUTED)
                   }
                 >
-                  **05377-02346**
+                  **05 22 99 36 99**
                 </a>
               </li>
               <li className="flex items-center group">
                 <Mail style={IconStyle} />
                 <a
-                  href="mailto:bn.assalam@gmail.com"
+                  href="mailto:assalamassociation@gmail.com"
                   style={{ color: WHITE_TEXT_MUTED }}
                   className="transition-colors text-base group-hover:text-white"
                   onMouseEnter={(e) => (e.target.style.color = ACCENT_BLUE)}
@@ -234,7 +233,7 @@ export default function Footer() {
                     (e.target.style.color = WHITE_TEXT_MUTED)
                   }
                 >
-                  **bn.assalam@gmail.com**
+                  **assalamassociation@gmail.com**
                 </a>
               </li>
             </ul>

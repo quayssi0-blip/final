@@ -1,6 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 const ContentCard = ({
   title,
@@ -10,7 +10,7 @@ const ContentCard = ({
   category,
   date,
   index,
-  isAboveFold = false
+  isAboveFold = false,
 }) => {
   return (
     <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -42,7 +42,9 @@ const ContentCard = ({
         </h3>
         <p className="text-gray-600 mb-4">{excerpt}</p>
         {date && (
-          <p className="text-sm text-gray-500">{new Date(date).toLocaleDateString()}</p>
+          <p className="text-sm text-gray-500">
+            {new Date(date).toLocaleDateString()}
+          </p>
         )}
         <Link
           href={link}

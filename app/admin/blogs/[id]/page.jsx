@@ -17,6 +17,7 @@ export default function EditBlogPage() {
     content: "",
     status: "draft",
     tags: "",
+    category: "education",
   });
   const [errors, setErrors] = useState({});
 
@@ -29,9 +30,11 @@ export default function EditBlogPage() {
         title: "Getting Started with React",
         slug: "getting-started-react",
         excerpt: "Learn the basics of React development",
-        content: "React is a popular JavaScript library for building user interfaces...",
+        content:
+          "React is a popular JavaScript library for building user interfaces...",
         status: "published",
         tags: "react, javascript, tutorial",
+        category: "education",
       };
 
       setFormData(mockBlog);
@@ -43,16 +46,16 @@ export default function EditBlogPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
 
@@ -64,9 +67,9 @@ export default function EditBlogPage() {
         .replace(/\s+/g, "-")
         .replace(/--+/g, "-")
         .trim();
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        slug: generatedSlug
+        slug: generatedSlug,
       }));
     }
   };
@@ -81,7 +84,8 @@ export default function EditBlogPage() {
     if (!formData.slug.trim()) {
       newErrors.slug = "Slug is required";
     } else if (!/^[a-z0-9-]+$/.test(formData.slug)) {
-      newErrors.slug = "Slug can only contain lowercase letters, numbers, and hyphens";
+      newErrors.slug =
+        "Slug can only contain lowercase letters, numbers, and hyphens";
     }
 
     if (!formData.excerpt.trim()) {
@@ -107,7 +111,7 @@ export default function EditBlogPage() {
 
     try {
       // This would be replaced with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
 
       // Success - redirect to blogs list
       router.push("/admin/blogs");
@@ -119,10 +123,14 @@ export default function EditBlogPage() {
   };
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this blog post? This action cannot be undone.")) {
+    if (
+      confirm(
+        "Are you sure you want to delete this blog post? This action cannot be undone.",
+      )
+    ) {
       try {
         // This would be replaced with actual API call
-        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
 
         // Success - redirect to blogs list
         router.push("/admin/blogs");
@@ -146,7 +154,9 @@ export default function EditBlogPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Edit Blog Post</h1>
-          <p className="text-gray-600">Update blog post information and content</p>
+          <p className="text-gray-600">
+            Update blog post information and content
+          </p>
         </div>
         <Link
           href="/admin/blogs"
@@ -168,7 +178,10 @@ export default function EditBlogPage() {
 
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Title *
             </label>
             <input
@@ -189,7 +202,10 @@ export default function EditBlogPage() {
 
           {/* Slug */}
           <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="slug"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Slug *
             </label>
             <input
@@ -210,7 +226,10 @@ export default function EditBlogPage() {
 
           {/* Status */}
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Status *
             </label>
             <select
@@ -225,9 +244,40 @@ export default function EditBlogPage() {
             </select>
           </div>
 
+          {/* Category */}
+          <div>
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Catégorie *
+            </label>
+            <select
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="education">Éducation</option>
+              <option value="autonomisation">Autonomisation des Femmes</option>
+              <option value="projets-sociaux">Projets Sociaux</option>
+              <option value="actualites">Actualités</option>
+              <option value="formation">Formation</option>
+              <option value="solidarite">Solidarité</option>
+              <option value="partenariats">Partenariats</option>
+              <option value="temoignages">Témoignages</option>
+              <option value="benevolat">Bénévolat</option>
+              <option value="impact-social">Impact Social</option>
+            </select>
+          </div>
+
           {/* Excerpt */}
           <div>
-            <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="excerpt"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Excerpt *
             </label>
             <textarea
@@ -248,7 +298,10 @@ export default function EditBlogPage() {
 
           {/* Tags */}
           <div>
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="tags"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Tags
             </label>
             <input
@@ -264,7 +317,10 @@ export default function EditBlogPage() {
 
           {/* Content */}
           <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="content"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Content *
             </label>
             <textarea

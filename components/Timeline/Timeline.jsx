@@ -11,7 +11,7 @@ const SECONDARY_COLOR = "#606060";
 
 // Enhanced Blueprint Keyframes and Styles (for Next.js)
 const BlueprintAnimationStyles = () => (
-    <style jsx global>{`
+  <style jsx global>{`
       /* Blueprint FadeIn Animation */
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
@@ -68,7 +68,6 @@ const BlueprintAnimationStyles = () => (
     `}</style>
 );
 
-
 // --- Main Components ---
 
 /**
@@ -76,10 +75,10 @@ const BlueprintAnimationStyles = () => (
  * Uses responsive horizontal layout with primary line and accent dots.
  */
 export const Timeline = ({ children }) => (
-    <div className="relative flex justify-between items-start pt-8 overflow-hidden">
-        <BlueprintAnimationStyles />
-        {children}
-    </div>
+  <div className="relative flex justify-between items-start pt-8 overflow-hidden">
+    <BlueprintAnimationStyles />
+    {children}
+  </div>
 );
 
 /**
@@ -89,71 +88,70 @@ export const Timeline = ({ children }) => (
  * @param {React.Component} icon - Lucide icon component
  */
 export const TimelineItem = ({ children, index, icon: Icon }) => (
+  <div
+    className="TimelineItem w-1/4 text-center animate-fade-in"
+    style={{
+      animationDelay: `${index * 0.2}s`,
+      zIndex: index,
+    }}
+  >
+    {/* Enhanced Timeline Dot with Animation */}
     <div
-        className="TimelineItem w-1/4 text-center animate-fade-in"
-        style={{
-            animationDelay: `${index * 0.2}s`,
-            zIndex: index
-        }}
-    >
-        {/* Enhanced Timeline Dot with Animation */}
-        <div
-            className="w-6 h-6 rounded-full mx-auto mb-6 relative z-10 shadow-lg animate-pulse-once"
-            style={{
-                backgroundColor: ACCENT_COLOR,
-                boxShadow: `0 0 0 4px rgba(176, 224, 230, 0.3)`,
-                animation: `pulse-once 2s ease-out ${index * 0.2 + 0.5}s both`
-            }}
-        ></div>
+      className="w-6 h-6 rounded-full mx-auto mb-6 relative z-10 shadow-lg animate-pulse-once"
+      style={{
+        backgroundColor: ACCENT_COLOR,
+        boxShadow: `0 0 0 4px rgba(176, 224, 230, 0.3)`,
+        animation: `pulse-once 2s ease-out ${index * 0.2 + 0.5}s both`,
+      }}
+    ></div>
 
-        {Icon && (
-            <div className="flex justify-center mb-4">
-                <div
-                    className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 animate-fade-in"
-                    style={{
-                        animationDelay: `${index * 0.2 + 0.3}s`,
-                        border: `2px solid ${PRIMARY_COLOR}40`
-                    }}
-                >
-                    <Icon size={28} style={{ color: ACCENT_COLOR }} />
-                </div>
-            </div>
-        )}
-
+    {Icon && (
+      <div className="flex justify-center mb-4">
         <div
-            className="animate-fade-in"
-            style={{ animationDelay: `${index * 0.2 + 0.6}s` }}
+          className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 animate-fade-in"
+          style={{
+            animationDelay: `${index * 0.2 + 0.3}s`,
+            border: `2px solid ${PRIMARY_COLOR}40`,
+          }}
         >
-            {children}
+          <Icon size={28} style={{ color: ACCENT_COLOR }} />
         </div>
+      </div>
+    )}
+
+    <div
+      className="animate-fade-in"
+      style={{ animationDelay: `${index * 0.2 + 0.6}s` }}
+    >
+      {children}
     </div>
+  </div>
 );
 
 /**
  * TimelineCard - The main content wrapper, styled as a card.
  */
 export const TimelineCard = ({ children }) => (
-    <div 
-        className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-b-2 hover:shadow-xl transition-shadow duration-300" 
-        style={{ borderColor: ACCENT_COLOR }}
-    >
-        {children}
-    </div>
+  <div
+    className="p-5 bg-white rounded-xl shadow-lg border-l-4 border-b-2 hover:shadow-xl transition-shadow duration-300"
+    style={{ borderColor: ACCENT_COLOR }}
+  >
+    {children}
+  </div>
 );
 
 /**
  * TimelineMarker - Visual point on the vertical line.
  */
 export const TimelineMarker = () => (
-    <span
-      className="absolute flex items-center justify-center -left-[0.95rem] w-6 h-6 rounded-full ring-4 ring-white shadow-md z-10 animate-pulse-once"
-      style={{ backgroundColor: ACCENT_COLOR }}
-      aria-hidden="true"
-    >
-        <ChevronRight className="w-4 h-4 text-white" />
-    </span>
+  <span
+    className="absolute flex items-center justify-center -left-[0.95rem] w-6 h-6 rounded-full ring-4 ring-white shadow-md z-10 animate-pulse-once"
+    style={{ backgroundColor: ACCENT_COLOR }}
+    aria-hidden="true"
+  >
+    <ChevronRight className="w-4 h-4 text-white" />
+  </span>
 );
-
 
 /**
  * TimelineTime - Displays the Date/Year of the event.
@@ -166,15 +164,15 @@ export const TimelineTime = ({ date, time, children }) => (
     <TimelineMarker />
 
     <div className="flex items-center space-x-1 text-sm font-semibold p-1 px-3 rounded-full bg-gray-50 border border-gray-200 shadow-sm">
-        <Calendar className="w-4 h-4" style={{ color: ACCENT_COLOR }} />
-        <span style={{ color: SECONDARY_COLOR }}>{date || children}</span>
+      <Calendar className="w-4 h-4" style={{ color: ACCENT_COLOR }} />
+      <span style={{ color: SECONDARY_COLOR }}>{date || children}</span>
     </div>
 
     {time && (
-        <div className="flex items-center space-x-1 text-sm p-1 px-3 rounded-full bg-gray-50 border border-gray-200 shadow-sm">
-            <Clock className="w-4 h-4" style={{ color: ACCENT_COLOR }} />
-            <span style={{ color: SECONDARY_COLOR }}>{time}</span>
-        </div>
+      <div className="flex items-center space-x-1 text-sm p-1 px-3 rounded-full bg-gray-50 border border-gray-200 shadow-sm">
+        <Clock className="w-4 h-4" style={{ color: ACCENT_COLOR }} />
+        <span style={{ color: SECONDARY_COLOR }}>{time}</span>
+      </div>
     )}
   </div>
 );
@@ -183,7 +181,10 @@ export const TimelineTime = ({ date, time, children }) => (
  * TimelineTitle - Title of the event with blueprint styling.
  */
 export const TimelineTitle = ({ children }) => (
-  <h4 className="TimelineTitle font-bold text-lg mb-2" style={{ color: TEXT_COLOR }}>
+  <h4
+    className="TimelineTitle font-bold text-lg mb-2"
+    style={{ color: TEXT_COLOR }}
+  >
     {children}
   </h4>
 );
@@ -192,7 +193,10 @@ export const TimelineTitle = ({ children }) => (
  * TimelineDescription - Description/Body of the event with blueprint styling.
  */
 export const TimelineDescription = ({ children }) => (
-  <p className="TimelineDescription text-sm text-gray-600" style={{ color: SECONDARY_COLOR }}>
+  <p
+    className="TimelineDescription text-sm text-gray-600"
+    style={{ color: SECONDARY_COLOR }}
+  >
     {children}
   </p>
 );

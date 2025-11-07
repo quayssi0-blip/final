@@ -1,42 +1,21 @@
-import useSWR from 'swr';
-import { supabaseClient } from '../lib/supabaseClient';
-import { supabaseFetcher } from '../lib/supabaseFetcher';
+import { useCRUD } from "./useCRUD";
 
 export function useMessages() {
-  const key = ['messages'];
-  const { data, error, isLoading, mutate } = useSWR(key, supabaseFetcher);
+  const { data, isLoading, isError, mutate, create, update, remove } = useCRUD(
+    "messages",
+    ["messages"],
+    "message",
+  );
 
-  const createMessage = async (messageData) => {
-    const { error: createError } = await supabaseClient.from('messages').insert([messageData]);
-    if (createError) {
-      console.error('Failed to create message:', createError);
-      throw new Error('Could not create message.');
-    }
-    mutate(); // Revalidate
-  };
-
-  const updateMessage = async (messageId, updatedData) => {
-    const { error: updateError } = await supabaseClient.from('messages').update(updatedData).eq('id', messageId);
-    if (updateError) {
-      console.error('Failed to update message:', updateError);
-      throw new Error('Could not update message.');
-    }
-    mutate(); // Revalidate
-  };
-
-  const deleteMessage = async (messageId) => {
-    const { error: deleteError } = await supabaseClient.from('messages').delete().eq('id', messageId);
-    if (deleteError) {
-      console.error('Failed to delete message:', deleteError);
-      throw new Error('Could not delete message.');
-    }
-    mutate(); // Revalidate
-  };
+  // Alias pour maintenir la compatibilité avec l'API existante
+  const createMessage = create;
+  const updateMessage = update;
+  const deleteMessage = remove;
 
   return {
     messages: data,
     isLoading,
-    isError: error,
+    isError,
     mutate,
     createMessage,
     updateMessage,

@@ -1,52 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { Pencil, Trash2, Plus, Search } from "lucide-react";
+import { useState } from "react";
+import StatusBadge from "@/components/StatusBadge";
+import { useAdmins } from "@/hooks/useAdmins";
 
 export default function AdminsPage() {
-  const [admins, setAdmins] = useState([]);
+  const { admins, isLoading, deleteAdmin } = useAdmins();
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
-  useEffect(() => {
-    // Simulate data fetching
-    const fetchAdmins = async () => {
-      // This would be replaced with actual API calls
-      const mockAdmins = [
-        { id: 1, email: "admin@example.com", role: "super_admin", createdAt: "2023-01-15" },
-        { id: 2, email: "content@example.com", role: "content_manager", createdAt: "2023-02-10" },
-        { id: 3, email: "message@example.com", role: "message_manager", createdAt: "2023-03-05" },
-      ];
-      setAdmins(mockAdmins);
-      setLoading(false);
-    };
-
-    fetchAdmins();
-  }, []);
-
-  const filteredAdmins = admins.filter(admin =>
-    admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.role.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredAdmins =
+    admins?.filter(
+      (admin) =>
+        admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        admin.role.toLowerCase().includes(searchTerm.toLowerCase()),
+    ) || [];
 
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this admin?")) {
-      // This would be replaced with actual API call
-      setAdmins(admins.filter(admin => admin.id !== id));
+      try {
+        setDeletingId(id);
+        await deleteAdmin(id);
+      } catch (error) {
+        console.error("Failed to delete admin:", error);
+        alert("Failed to delete admin. Please try again.");
+      } finally {
+        setDeletingId(null);
+      }
     }
   };
 
-  const getRoleBadgeColor = (role) => {
-    switch (role) {
-      case "super_admin": return "bg-red-100 text-red-800";
-      case "content_manager": return "bg-blue-100 text-blue-800";
-      case "message_manager": return "bg-green-100 text-green-800";
-      default: return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -60,7 +46,9 @@ export default function AdminsPage() {
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Administrators</h1>
-          <p className="text-gray-600">Manage administrator accounts and permissions</p>
+          <p className="text-gray-600">
+            Manage administrator accounts and permissions
+          </p>
         </div>
         <Link
           href="/admin/admins/new"
@@ -109,12 +97,12 @@ export default function AdminsPage() {
               {filteredAdmins.map((admin) => (
                 <tr key={admin.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{admin.email}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {admin.email}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleBadgeColor(admin.role)}`}>
-                      {admin.role.replace("_", " ")}
-                    </span>
+                    <StatusBadge status={admin.role} type="role" />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(admin.createdAt).toLocaleDateString()}
@@ -128,8 +116,10 @@ export default function AdminsPage() {
                         <Pencil className="h-5 w-5" />
                       </Link>
                       <button
+                        type="button"
                         onClick={() => handleDelete(admin.id)}
-                        className="text-red-600 hover:text-red-900 p-1"
+                        disabled={deletingId === admin.id}
+                        className="text-red-600 hover:text-red-900 p-1 disabled:opacity-50"
                       >
                         <Trash2 className="h-5 w-5" />
                       </button>
@@ -151,13 +141,22 @@ export default function AdminsPage() {
       {/* Pagination placeholder */}
       <div className="flex justify-center">
         <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-          <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+          <button
+            type="button"
+            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
             Previous
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+          <button
+            type="button"
+            className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
+          >
             1
           </button>
-          <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+          <button
+            type="button"
+            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
             Next
           </button>
         </nav>

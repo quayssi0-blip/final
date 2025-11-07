@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { ProjectsController } from '../../../../lib/controllers/projects';
+import { NextResponse } from "next/server";
+import { ProjectsController } from "../../../../lib/controllers/projects";
 
 export async function GET(request, { params }) {
   try {
@@ -7,17 +7,23 @@ export async function GET(request, { params }) {
     const project = await ProjectsController.getProjectById(id);
     return NextResponse.json(project);
   } catch (err) {
-    console.error('Error fetching project:', err.message);
-    return NextResponse.json({ error: err.message }, { status: err.message.includes('not found') ? 404 : 500 });
+    console.error("Error fetching project:", err.message);
+    return NextResponse.json(
+      { error: err.message },
+      { status: err.message.includes("not found") ? 404 : 500 },
+    );
   }
 }
 
 export async function PUT(request, { params }) {
   try {
-    const { data: { user }, error: authError } = await supabaseServer.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseServer.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = params;
@@ -25,24 +31,27 @@ export async function PUT(request, { params }) {
     const project = await ProjectsController.updateProject(user, id, body);
     return NextResponse.json(project);
   } catch (err) {
-    console.error('Error updating project:', err.message);
+    console.error("Error updating project:", err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
 export async function DELETE(request, { params }) {
   try {
-    const { data: { user }, error: authError } = await supabaseServer.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseServer.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = params;
     const result = await ProjectsController.deleteProject(user, id);
     return NextResponse.json(result);
   } catch (err) {
-    console.error('Error deleting project:', err.message);
+    console.error("Error deleting project:", err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

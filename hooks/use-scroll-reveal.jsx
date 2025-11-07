@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export const useScrollReveal = (options = {}) => {
   const elementRef = useRef(null);
@@ -11,15 +11,15 @@ export const useScrollReveal = (options = {}) => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('reveal');
+            entry.target.classList.add("reveal");
           }
         });
       },
       {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
+        rootMargin: "0px 0px -50px 0px",
         ...options,
-      }
+      },
     );
 
     observer.observe(element);

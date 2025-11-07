@@ -7,7 +7,7 @@ import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
 import Textarea from "@/components/Textarea/Textarea";
 import Alert from "@/components/Alert/Alert";
-import UnifiedHero from "@/components/UnifiedHero";
+import UnifiedHero from "@/components/UnifiedHero/UnifiedHero";
 import StyledProjectInfoCard from "@/components/StyledProjectInfoCard/StyledProjectInfoCard";
 import ProjectContentSection from "@/components/ProjectContentSection/ProjectContentSection";
 import ProjectGallery from "@/components/ProjectGallery/ProjectGallery";
@@ -39,7 +39,8 @@ export async function generateMetadata({ params }) {
 
     return {
       title: `${project.title} | Fondation Assalam`,
-      description: project.excerpt || "Découvrez nos projets d'impact social au Maroc",
+      description:
+        project.excerpt || "Découvrez nos projets d'impact social au Maroc",
     };
   } catch (error) {
     return {
@@ -62,7 +63,9 @@ export default async function ProjectPage({ params }) {
     {
       type: "date",
       label: "Date de lancement",
-      value: project?.start_date ? new Date(project.start_date).toLocaleDateString('fr-FR') : "N/A",
+      value: project?.start_date
+        ? new Date(project.start_date).toLocaleDateString("fr-FR")
+        : "N/A",
       icon: CalendarDays,
     }, // Enhanced & Fixed Content
     {
@@ -92,9 +95,15 @@ export default async function ProjectPage({ params }) {
       <UnifiedHero
         title={project.title}
         subtitle={project.excerpt}
+        overlayColor="rgba(100, 149, 237, 0.6)" // Blue overlay for individual projects
         images={[
           project.image || "/projects/foundation1.jpg",
-          ...project.project_images?.slice(0, 3).map(img => img.image_url.replace(/^"|"$/g, '')) || ["/projects/foundation2.jpg", "/projects/foundation3.jpg"]
+          ...(project.project_images
+            ?.slice(0, 3)
+            .map((img) => img.image_url.replace(/^"|"$/g, "")) || [
+            "/projects/foundation2.jpg",
+            "/projects/foundation3.jpg",
+          ]),
         ]}
       />
 
@@ -193,21 +202,26 @@ export default async function ProjectPage({ params }) {
             />
 
             {/* Additional content blocks rendered as display-only */}
-            {project.content && project.content.length > 1 && (
-              project.content.slice(1).map((block, index) => ( // Skip first block as it's already rendered above
-                <ContentBlock
-                  key={block.id || `block-${index}`}
-                  block={block}
-                  index={index}
-                  contentTypes={[]} // Not needed for display-only mode
-                  updateContentBlock={() => {}} // Not needed for display-only mode
-                  removeContentBlock={() => {}} // Not needed for display-only mode
-                  handleDragStart={() => {}} // Not needed for display-only mode
-                  handleDragOver={() => {}} // Not needed for display-only mode
-                  handleDrop={() => {}} // Not needed for display-only mode
-                />
-              ))
-            )}
+            {project.content &&
+              project.content.length > 1 &&
+              project.content.slice(1).map(
+                (
+                  block,
+                  index, // Skip first block as it's already rendered above
+                ) => (
+                  <ContentBlock
+                    key={block.id || `block-${index}`}
+                    block={block}
+                    index={index}
+                    contentTypes={[]} // Not needed for display-only mode
+                    updateContentBlock={() => {}} // Not needed for display-only mode
+                    removeContentBlock={() => {}} // Not needed for display-only mode
+                    handleDragStart={() => {}} // Not needed for display-only mode
+                    handleDragOver={() => {}} // Not needed for display-only mode
+                    handleDrop={() => {}} // Not needed for display-only mode
+                  />
+                ),
+              )}
           </div>
 
           {/* Sidebar */}

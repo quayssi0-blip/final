@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
+import { useBlogs } from "../../../../hooks/useBlogs";
 
 export default function NewBlogPage() {
   const router = useRouter();
+  const { createBlog, mutate } = useBlogs();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -15,21 +17,25 @@ export default function NewBlogPage() {
     content: "",
     status: "draft",
     tags: "",
+    category: "general",
+    image: null,
   });
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
 
@@ -41,10 +47,27 @@ export default function NewBlogPage() {
         .replace(/\s+/g, "-")
         .replace(/--+/g, "-")
         .trim();
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        slug: generatedSlug
+        slug: generatedSlug,
       }));
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+      }));
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -58,7 +81,8 @@ export default function NewBlogPage() {
     if (!formData.slug.trim()) {
       newErrors.slug = "Slug is required";
     } else if (!/^[a-z0-9-]+$/.test(formData.slug)) {
-      newErrors.slug = "Slug can only contain lowercase letters, numbers, and hyphens";
+      newErrors.slug =
+        "Slug can only contain lowercase letters, numbers, and hyphens";
     }
 
     if (!formData.excerpt.trim()) {
@@ -83,13 +107,46 @@ export default function NewBlogPage() {
     setLoading(true);
 
     try {
-      // This would be replaced with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      let finalImageUrl = imageUrl;
 
+      // Upload image if a new one was selected
+      if (formData.image) {
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", formData.image);
+        uploadFormData.append("type", "blog");
+
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadFormData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error("Failed to upload image");
+        }
+
+        const uploadResult = await uploadResponse.json();
+        finalImageUrl = uploadResult.url;
+      }
+
+      // Create blog with image URL
+      const blogData = {
+        ...formData,
+        image: finalImageUrl,
+        category: formData.category, // Use selected category
+        tags: formData.tags, // Keep tags as string
+      };
+
+      // Use the hook to create blog
+      await createBlog(blogData);
+      
+      // Refresh the blogs list
+      mutate();
+      
       // Success - redirect to blogs list
       router.push("/admin/blogs");
     } catch (error) {
-      setErrors({ submit: "Failed to create blog post. Please try again." });
+      console.error("Error creating blog:", error.message);
+      setErrors({ submit: error.message });
     } finally {
       setLoading(false);
     }
@@ -100,8 +157,12 @@ export default function NewBlogPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Add New Blog Post</h1>
-          <p className="text-gray-600">Create a new blog post for your website</p>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Add New Blog Post
+          </h1>
+          <p className="text-gray-600">
+            Create a new blog post for your website
+          </p>
         </div>
         <Link
           href="/admin/blogs"
@@ -123,7 +184,10 @@ export default function NewBlogPage() {
 
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Title *
             </label>
             <input
@@ -144,7 +208,10 @@ export default function NewBlogPage() {
 
           {/* Slug */}
           <div>
-            <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="slug"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Slug *
             </label>
             <input
@@ -165,7 +232,10 @@ export default function NewBlogPage() {
 
           {/* Status */}
           <div>
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Status *
             </label>
             <select
@@ -180,9 +250,40 @@ export default function NewBlogPage() {
             </select>
           </div>
 
+          {/* Category */}
+          <div>
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Category *
+            </label>
+            <select
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="education">Éducation</option>
+              <option value="autonomisation">Autonomisation des Femmes</option>
+              <option value="projets-sociaux">Projets Sociaux</option>
+              <option value="actualites">Actualités</option>
+              <option value="formation">Formation</option>
+              <option value="solidarite">Solidarité</option>
+              <option value="partenariats">Partenariats</option>
+              <option value="temoignages">Témoignages</option>
+              <option value="benevolat">Bénévolat</option>
+              <option value="impact-social">Impact Social</option>
+            </select>
+          </div>
+
           {/* Excerpt */}
           <div>
-            <label htmlFor="excerpt" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="excerpt"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Excerpt *
             </label>
             <textarea
@@ -203,7 +304,10 @@ export default function NewBlogPage() {
 
           {/* Tags */}
           <div>
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="tags"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Tags
             </label>
             <input
@@ -217,9 +321,42 @@ export default function NewBlogPage() {
             />
           </div>
 
+          {/* Image */}
+          <div>
+            <label
+              htmlFor="image"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Featured Image
+            </label>
+            <div className="space-y-4">
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              {imagePreview && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">Image Preview:</p>
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-48 h-48 object-cover rounded-lg border"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Content */}
           <div>
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="content"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Content *
             </label>
             <textarea

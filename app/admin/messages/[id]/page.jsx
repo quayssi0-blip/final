@@ -4,45 +4,64 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Mail, User, Calendar, Trash2 } from "lucide-react";
+import { useMessages } from "../../../../hooks/useMessages";
 
 export default function MessageDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { messages, updateMessage, deleteMessage, mutate } = useMessages();
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // Simulate fetching message data
     const fetchMessage = async () => {
-      // This would be replaced with actual API call
-      const mockMessage = {
-        id: params.id,
-        name: "John Doe",
-        email: "john@example.com",
-        subject: "Project Inquiry",
-        message: "Hello,\n\nI'm interested in working with you on a new project. We have an e-commerce website that needs to be redesigned and would like to discuss the possibilities.\n\nLooking forward to hearing from you.\n\nBest regards,\nJohn Doe",
-        isRead: true,
-        createdAt: "2023-01-15T10:30:00Z",
-      };
-
-      setMessage(mockMessage);
-      setLoading(false);
+      if (messages && messages.length > 0) {
+        // Find the message from the list
+        const foundMessage = messages.find(msg => msg.id === params.id);
+        if (foundMessage) {
+          setMessage(foundMessage);
+          
+          // Automatically mark as read if not already read
+          if (!foundMessage.is_read) {
+            try {
+              await updateMessage(params.id, { is_read: true });
+              // Update local state
+              setMessage(prev => prev ? { ...prev, is_read: true } : null);
+            } catch (error) {
+              console.error("Failed to mark message as read:", error);
+            }
+          }
+        }
+        setLoading(false);
+      } else if (messages) {
+        // Messages loaded but not found
+        setMessage(null);
+        setLoading(false);
+      }
     };
 
     fetchMessage();
-  }, [params.id]);
+  }, [params.id, messages, updateMessage]);
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this message? This action cannot be undone.")) {
+    if (
+      confirm(
+        "Are you sure you want to delete this message? This action cannot be undone.",
+      )
+    ) {
       try {
-        // This would be replaced with actual API call
-        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
-
+        // Use the hook to delete the message
+        await deleteMessage(params.id);
+        
+        // Refresh the messages list
+        mutate();
+        
         // Success - redirect to messages list
         router.push("/admin/messages");
       } catch (error) {
-        setErrors({ submit: "Failed to delete message. Please try again." });
+        console.error("Error deleting message:", error.message);
+        setErrors({ submit: error.message });
       }
     }
   };
@@ -63,8 +82,12 @@ export default function MessageDetailPage() {
     return (
       <div className="text-center py-12">
         <Mail className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-sm font-medium text-gray-900">Message not found</h3>
-        <p className="mt-1 text-sm text-gray-500">The message you're looking for doesn't exist.</p>
+        <h3 className="mt-2 text-sm font-medium text-gray-900">
+          Message not found
+        </h3>
+        <p className="mt-1 text-sm text-gray-500">
+          The message you're looking for doesn't exist.
+        </p>
         <Link
           href="/admin/messages"
           className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
@@ -81,7 +104,9 @@ export default function MessageDetailPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Message Details</h1>
-          <p className="text-gray-600">View and manage contact form submission</p>
+          <p className="text-gray-600">
+            View and manage contact form submission
+          </p>
         </div>
         <Link
           href="/admin/messages"
@@ -102,7 +127,9 @@ export default function MessageDetailPage() {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {/* Message Header */}
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">{message.subject}</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            {message.subject}
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center">
@@ -125,7 +152,7 @@ export default function MessageDetailPage() {
             <div className="flex items-center">
               <Calendar className="h-4 w-4 text-gray-400 mr-2" />
               <span className="text-gray-600">Date:</span>
-              <span className="ml-2">{formatDate(message.createdAt)}</span>
+              <span className="ml-2">{formatDate(message.created_at)}</span>
             </div>
           </div>
         </div>
@@ -148,7 +175,12 @@ export default function MessageDetailPage() {
 
             <div className="flex space-x-3">
               <button
-                onClick={() => window.open(`mailto:${message.email}?subject=Re: ${message.subject}`, '_blank')}
+                onClick={() =>
+                  window.open(
+                    `mailto:${message.email}?subject=Re: ${message.subject}`,
+                    "_blank",
+                  )
+                }
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
               >
                 <Mail className="h-4 w-4 mr-2" />
@@ -169,10 +201,17 @@ export default function MessageDetailPage() {
 
       {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">
+          Quick Actions
+        </h3>
         <div className="flex flex-wrap gap-3">
           <button
-            onClick={() => window.open(`mailto:${message.email}?subject=Re: ${message.subject}`, '_blank')}
+            onClick={() =>
+              window.open(
+                `mailto:${message.email}?subject=Re: ${message.subject}`,
+                "_blank",
+              )
+            }
             className="inline-flex items-center px-4 py-2 border border-blue-300 text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200"
           >
             <Mail className="h-4 w-4 mr-2" />

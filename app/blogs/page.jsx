@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -25,22 +25,23 @@ export default function Blogs({ searchParams }) {
   // Use custom hook for data fetching
   const { blogs: allBlogs, isLoading, isError } = useBlogs();
 
-  // Parse search params (simulate client-side params)
-  const params = searchParams || {};
+  // Unwrap searchParams in Client Component using React.use()
+  const params = React.use(searchParams) || {};
   const category = params.category || null;
   const page = parseInt(params.page || "1", 10);
   const blogsPerPage = 6;
 
   // Transform blogs data for consistent format
-  const transformedBlogs = allBlogs?.map(blog => ({
-    id: blog.id,
-    title: blog.title,
-    excerpt: blog.excerpt,
-    image: blog.image || "/placeholder-blog.jpg",
-    slug: blog.slug,
-    category: blog.category,
-    createdAt: new Date(blog.created_at).toISOString().split('T')[0],
-  })) || [];
+  const transformedBlogs =
+    allBlogs?.map((blog) => ({
+      id: blog.id,
+      title: blog.title,
+      excerpt: blog.excerpt,
+      image: blog.image || "/placeholder-blog.jpg",
+      slug: blog.slug,
+      category: blog.category,
+      createdAt: new Date(blog.created_at).toISOString().split("T")[0],
+    })) || [];
 
   // Filter blogs by category if a category is selected
   const filteredBlogs = category
@@ -54,7 +55,9 @@ export default function Blogs({ searchParams }) {
     page * blogsPerPage,
   );
 
-  const categories = [...new Set(transformedBlogs.map((blog) => blog.category))];
+  const categories = [
+    ...new Set(transformedBlogs.map((blog) => blog.category)),
+  ];
 
   return (
     <main style={{ backgroundColor: BACKGROUND }} className="space-y-16">
@@ -76,7 +79,8 @@ export default function Blogs({ searchParams }) {
                 Récits d'Impact et Actualités
               </h2>
               <p className="max-w-2xl mx-auto" style={{ color: DARK_TEXT }}>
-                Découvrez les histoires d'espoir, les actualités et les avancées de la Fondation Assalam à travers le Maroc.
+                Découvrez les histoires d'espoir, les actualités et les avancées
+                de la Fondation Assalam à travers le Maroc.
               </p>
             </div>
 

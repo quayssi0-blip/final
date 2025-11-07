@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect } from "react";
 import Image from "next/image";
@@ -14,35 +14,36 @@ const ImageModal = ({
   currentIndex,
   onNext,
   onPrevious,
-  projectTitle
+  projectTitle,
 }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (!isOpen) return;
 
       switch (event.key) {
-        case 'Escape':
+        case "Escape":
           onClose();
           break;
-        case 'ArrowRight':
+        case "ArrowRight":
           onNext();
           break;
-        case 'ArrowLeft':
+        case "ArrowLeft":
           onPrevious();
           break;
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose, onNext, onPrevious]);
 
   if (!isOpen || !images || images.length === 0) return null;
 
   const currentImage = images[currentIndex];
-  const cleanUrl = currentImage && typeof currentImage === 'string'
-    ? currentImage.replace(/^"|"$/g, '')
-    : '';
+  const cleanUrl =
+    currentImage && typeof currentImage === "string"
+      ? currentImage.replace(/^"|"$/g, "")
+      : "";
 
   return (
     <div
@@ -96,7 +97,7 @@ const ImageModal = ({
             width={800}
             height={600}
             className="max-w-full max-h-full object-contain"
-            style={{ maxHeight: '90vh' }}
+            style={{ maxHeight: "90vh" }}
           />
         ) : (
           <div className="flex items-center justify-center w-96 h-96 bg-gray-800 rounded-lg">
