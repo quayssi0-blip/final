@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
-import { Heart, Users, Target, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useProjects } from "@/hooks/useProjects";
 
 // --- Sub-Components (Concise & Grouped) ---
@@ -27,25 +27,7 @@ const BackgroundPattern = () => (
   </div>
 );
 
-// 2. Decorative Icons
-const DecorativeIcons = () => (
-  <div
-    className="flex justify-center space-x-6 mb-8 opacity-90"
-    aria-hidden="true"
-  >
-    {[Heart, Users, Target].map((Icon, i) => (
-      <div
-        key={i}
-        className="p-3 bg-white/20 backdrop-blur-sm rounded-full transition duration-300 hover:scale-110"
-        style={{
-          animation: `stagger-fade-in 0.8s ease-out ${0.1 + i * 0.1}s both`,
-        }}
-      >
-        <Icon className="w-6 h-6 text-white" />
-      </div>
-    ))}
-  </div>
-);
+// 2. Decorative Icons - Removed as requested
 
 // 3. Scroll Indicator
 const ScrollIndicator = () => (
@@ -239,12 +221,9 @@ const UnifiedHero = ({ title, subtitle, images = [], overlayColor }) => {
 
       {/* 2. Main Content Container */}
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 flex flex-col items-center justify-center h-full">
-        {/* Decorative Icons */}
-        <DecorativeIcons />
-
         {/* Main Title (Enhanced Staggered Reveal) */}
         <h1
-          className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight text-white"
+          className="text-5xl md:text-6xl font-extrabold mb-8 leading-tight text-white"
           aria-label={safeTitle}
         >
           {words.map((word, index) => (
@@ -255,7 +234,7 @@ const UnifiedHero = ({ title, subtitle, images = [], overlayColor }) => {
               }`}
               style={{
                 // Apply the staggered animation using the custom keyframe
-                animation: `stagger-fade-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.3 + index * 0.1}s both`,
+                animation: `stagger-fade-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.1 + index * 0.1}s both`,
                 textShadow:
                   index % 2 === 0 ? "2px 2px 4px rgba(0,0,0,0.3)" : "none",
               }}

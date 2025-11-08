@@ -1,49 +1,55 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 
 /**
- * Featured Post (Large horizontal card using Accent border).
+ * Featured Post - Modern design inspired by the provided code
  */
 const FeaturedPost = ({ post }) => {
   if (!post) return null;
+  
   return (
-    <div
-      className="card-lift mb-16 rounded-xl overflow-hidden shadow-2xl transition duration-500 hover:scale-[1.005] scroll-reveal"
-      style={{ borderLeft: `8px solid #6495ED`, backgroundColor: "white" }}
-    >
-      <Link href={`/blogs/${post.slug}`} className="grid md:grid-cols-3 gap-8">
-        <div className="relative h-64 md:h-full md:col-span-1">
-          <Image
-            src={post.image || "/placeholder.svg?height=800&width=1200"}
-            alt={post.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-            quality={85}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+IRjWjBqO6O2mhP//Z"
-            className="object-cover"
-            priority
-          />
+    <div className="bg-white rounded-2xl shadow-xl overflow-hidden group scroll-reveal mb-16 animate-pulse-gentle">
+      <div className="md:flex">
+        <div className="md:w-1/2">
+          <div className="overflow-hidden image-hover">
+            <Image
+              src={post.image || "/placeholder.svg?height=800&width=1200"}
+              alt={post.title}
+              width={800}
+              height={600}
+              className="h-64 w-full object-cover md:h-full"
+              priority
+            />
+          </div>
         </div>
-        <div className="md:col-span-2 p-8 flex flex-col justify-center">
-          <span
-            className="text-sm font-semibold px-3 py-1 rounded-full mb-3 inline-block self-start"
-            style={{ backgroundColor: "#6495ED1A", color: "#6495ED" }}
-          >
-            {post.category}
-          </span>
-          <h2 className="text-3xl font-bold mb-3" style={{ color: "#333333" }}>
-            {post.title}
-          </h2>
-          <p className="text-lg text-gray-700 mb-4 line-clamp-3">
+        <div className="p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
+          <div className="animate-scale-fade-in">
+            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider category-filter-item">
+              {post.category}
+            </span>
+          </div>
+          <h1 className="mt-4 text-2xl md:text-3xl font-bold text-slate-900 leading-tight line-clamp-3 animate-slide-in-left">
+            <Link
+              href={`/blogs/${post.slug}`}
+              className="hover:text-blue-600 transition-colors duration-300 text-reveal"
+            >
+              {post.title}
+            </Link>
+          </h1>
+          <p className="mt-4 text-slate-600 text-lg animate-slide-in-right">
             {post.excerpt}
           </p>
-          <span className="font-semibold" style={{ color: "#6495ED" }}>
-            Découvrir le récit &rarr;
-          </span>
+          <Link
+            href={`/blogs/${post.slug}`}
+            className="mt-8 inline-flex items-center font-bold text-blue-600 group-hover:text-blue-800 transition-colors duration-300 btn-hover animate-scale-fade-in"
+          >
+            <span>Lire l'article complet</span>
+            <ArrowRight className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

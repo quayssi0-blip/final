@@ -64,9 +64,7 @@ export default function Home() {
       title: project.title,
       excerpt: project.excerpt,
       image: project.image || "/placeholder-project.jpg",
-      link: project.slug
-        ? `/projects/${project.slug}`
-        : `/projects/${project.id}`,
+      link: `/projects/${project.slug}`,
     })) || [];
 
   // Transform blogs data for ContentCard component

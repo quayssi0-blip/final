@@ -10,6 +10,12 @@ export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { blogs, isLoading, isError, deleteBlog } = useBlogs();
 
+  // Fonction pour tronquer le texte à 20 caractères
+  const truncateText = (text, maxLength = 20) => {
+    if (!text) return "";
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+  };
+
   // Filtrage côté client pour la recherche
   const filteredBlogs = blogs?.filter(
     (blog) =>
@@ -110,12 +116,14 @@ export default function BlogsPage() {
               {filteredBlogs.map((blog) => (
                 <tr key={blog.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {blog.title}
+                    <div className="text-sm font-medium text-gray-900" title={blog.title}>
+                      {truncateText(blog.title)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{blog.slug}</div>
+                    <div className="text-sm text-gray-500" title={blog.slug}>
+                      {truncateText(blog.slug)}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StatusBadge status={blog.status} type="status" />

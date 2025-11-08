@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import "../../styles/sidebar-no-animation.css";
 import {
   Newspaper,
   MessageSquare,
@@ -11,6 +12,7 @@ import {
   Home,
   LogOut,
   ChevronRight,
+  MessageCircle,
 } from "lucide-react";
 
 const AdminSidebar = ({ user }) => {
@@ -27,6 +29,12 @@ const AdminSidebar = ({ user }) => {
       name: "Articles",
       href: "/admin/blogs",
       icon: <Newspaper className="h-5 w-5" />,
+      permission: ["super_admin", "content_manager"],
+    },
+    {
+      name: "Commentaires",
+      href: "/admin/comments",
+      icon: <MessageCircle className="h-5 w-5" />,
       permission: ["super_admin", "content_manager"],
     },
     {
@@ -57,7 +65,7 @@ const AdminSidebar = ({ user }) => {
 
   return (
     <aside
-      className="w-64 shadow-lg h-screen sticky top-0 border-r border-gray-100 transition-all duration-300"
+      className="admin-sidebar w-64 shadow-lg h-screen sticky top-0 border-r border-gray-100"
       style={{ backgroundColor: "white" }}
     >
       <div
@@ -66,7 +74,7 @@ const AdminSidebar = ({ user }) => {
       >
         <Link
           href="/admin/dashboard"
-          className="text-2xl font-bold hover:text-accent transition-colors duration-200"
+          className="text-2xl font-bold hover:text-accent"
           style={{ color: "#333333" }}
         >
           Admin Assalam
@@ -78,7 +86,7 @@ const AdminSidebar = ({ user }) => {
 
       <nav className="mt-8">
         <ul className="space-y-1 px-4">
-          {filteredNavItems.map((item, index) => {
+          {filteredNavItems.map((item) => {
             const isActive =
               currentPath === item.href ||
               (item.href === "/admin/blogs" &&
@@ -88,23 +96,22 @@ const AdminSidebar = ({ user }) => {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className={`group relative flex items-center px-4 py-3 rounded-lg transition-all duration-300 font-medium text-base
+                  className={`group relative flex items-center px-4 py-3 rounded-lg font-medium text-base
                     focus:outline-none focus:ring-4 focus:ring-accent focus:ring-opacity-50
                     ${
                       isActive
                         ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                        : "text-gray-700 hover:bg-gray-100 hover:shadow-md hover:translate-x-1 card-lift"
+                        : "text-gray-700 hover:bg-gray-100"
                     }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   {isActive && (
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-white rounded-full"></div>
                   )}
                   <span
-                    className={`mr-4 transition-all duration-300 ${
+                    className={`mr-4 ${
                       isActive
                         ? "text-white"
-                        : "text-blue-500 group-hover:scale-110"
+                        : "text-blue-500"
                     }`}
                   >
                     {item.icon}
@@ -118,10 +125,10 @@ const AdminSidebar = ({ user }) => {
           <li className="pt-8 border-t border-gray-100 mt-8">
             <Link
               href="/"
-              className="group flex items-center px-4 py-3 hover:bg-gray-100 rounded-lg transition-all duration-300 font-medium hover:shadow-md hover:translate-x-1 focus:outline-none focus:ring-4 focus:ring-accent focus:ring-opacity-50 card-lift scroll-reveal"
+              className="group flex items-center px-4 py-3 hover:bg-gray-100 rounded-lg font-medium focus:outline-none focus:ring-4 focus:ring-accent focus:ring-opacity-50"
               style={{ color: "#6495ED" }}
             >
-              <Home className="h-5 w-5 mr-4 transition-transform group-hover:scale-110 duration-300" />
+              <Home className="h-5 w-5 mr-4" />
               <span className="text-base">Retour à l'accueil</span>
             </Link>
           </li>
@@ -131,7 +138,7 @@ const AdminSidebar = ({ user }) => {
       <div className="pt-4 mt-4 border-t border-gray-100 px-4">
         <Link
           href="/api/auth/logout"
-          className="flex items-center p-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors duration-200"
+          className="flex items-center p-3 rounded-xl text-red-600 hover:bg-red-50"
         >
           <LogOut className="h-5 w-5 mr-3" />
           <span className="text-sm font-medium">Déconnexion</span>

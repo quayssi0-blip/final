@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { useBlogs } from "../../../../hooks/useBlogs";
 
 export default function EditBlogPage() {
   const params = useParams();
   const router = useRouter();
+  const { blogs, updateBlog, deleteBlog, mutate } = useBlogs();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,27 +24,30 @@ export default function EditBlogPage() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // Simulate fetching blog data
     const fetchBlog = async () => {
-      // This would be replaced with actual API call
-      const mockBlog = {
-        id: params.id,
-        title: "Getting Started with React",
-        slug: "getting-started-react",
-        excerpt: "Learn the basics of React development",
-        content:
-          "React is a popular JavaScript library for building user interfaces...",
-        status: "published",
-        tags: "react, javascript, tutorial",
-        category: "education",
-      };
-
-      setFormData(mockBlog);
-      setLoading(false);
+      if (blogs && blogs.length > 0) {
+        // Find the blog from the list
+        const foundBlog = blogs.find(blog => blog.id === params.id);
+        if (foundBlog) {
+          setFormData({
+            title: foundBlog.title || "",
+            slug: foundBlog.slug || "",
+            excerpt: foundBlog.excerpt || "",
+            content: foundBlog.content || "",
+            status: foundBlog.status || "draft",
+            tags: foundBlog.tags || "",
+            category: foundBlog.category || "education",
+          });
+        }
+        setLoading(false);
+      } else if (blogs) {
+        // Blogs loaded but not found
+        setLoading(false);
+      }
     };
 
     fetchBlog();
-  }, [params.id]);
+  }, [params.id, blogs]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -110,13 +115,17 @@ export default function EditBlogPage() {
     setSaving(true);
 
     try {
-      // This would be replaced with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
+      // Use the hook to update the blog
+      await updateBlog(params.id, formData);
+      
+      // Refresh the blogs list
+      mutate();
+      
       // Success - redirect to blogs list
       router.push("/admin/blogs");
     } catch (error) {
-      setErrors({ submit: "Failed to update blog post. Please try again." });
+      console.error("Error updating blog:", error.message);
+      setErrors({ submit: error.message });
     } finally {
       setSaving(false);
     }
@@ -129,13 +138,17 @@ export default function EditBlogPage() {
       )
     ) {
       try {
-        // This would be replaced with actual API call
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
-
+        // Use the hook to delete the blog
+        await deleteBlog(params.id);
+        
+        // Refresh the blogs list
+        mutate();
+        
         // Success - redirect to blogs list
         router.push("/admin/blogs");
       } catch (error) {
-        setErrors({ submit: "Failed to delete blog post. Please try again." });
+        console.error("Error deleting blog:", error.message);
+        setErrors({ submit: error.message });
       }
     }
   };

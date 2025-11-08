@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { useAdmins } from "../../../../hooks/useAdmins";
 
 export default function EditAdminPage() {
   const params = useParams();
   const router = useRouter();
+  const { admins, updateAdmin, deleteAdmin, mutate } = useAdmins();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,21 +19,25 @@ export default function EditAdminPage() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    // Simulate fetching admin data
     const fetchAdmin = async () => {
-      // This would be replaced with actual API call
-      const mockAdmin = {
-        id: params.id,
-        email: "admin@example.com",
-        role: "content_manager",
-      };
-
-      setFormData(mockAdmin);
-      setLoading(false);
+      if (admins && admins.length > 0) {
+        // Find the admin from the list
+        const foundAdmin = admins.find(admin => admin.id === params.id);
+        if (foundAdmin) {
+          setFormData({
+            email: foundAdmin.email || "",
+            role: foundAdmin.role || "content_manager",
+          });
+        }
+        setLoading(false);
+      } else if (admins) {
+        // Admins loaded but not found
+        setLoading(false);
+      }
     };
 
     fetchAdmin();
-  }, [params.id]);
+  }, [params.id, admins]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -76,13 +82,14 @@ export default function EditAdminPage() {
     setSaving(true);
 
     try {
-      // This would be replaced with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
+      // Use the hook to update the admin
+      await updateAdmin(params.id, formData);
+      
       // Success - redirect to admins list
       router.push("/admin/admins");
     } catch (error) {
-      setErrors({ submit: "Failed to update admin. Please try again." });
+      console.error("Error updating admin:", error.message);
+      setErrors({ submit: error.message });
     } finally {
       setSaving(false);
     }
@@ -95,13 +102,14 @@ export default function EditAdminPage() {
       )
     ) {
       try {
-        // This would be replaced with actual API call
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
-
+        // Use the hook to delete the admin
+        await deleteAdmin(params.id);
+        
         // Success - redirect to admins list
         router.push("/admin/admins");
       } catch (error) {
-        setErrors({ submit: "Failed to delete admin. Please try again." });
+        console.error("Error deleting admin:", error.message);
+        setErrors({ submit: error.message });
       }
     }
   };

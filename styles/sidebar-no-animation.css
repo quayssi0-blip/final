@@ -1,0 +1,65 @@
+/* Suppression des animations et transformations de la sidebar */
+
+.admin-sidebar,
+.admin-sidebar *,
+.admin-sidebar *::before,
+.admin-sidebar *::after {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+/* Exceptions pour les éléments qui doivent garder leurs transitions essentielles */
+.admin-sidebar a {
+  transition: none !important;
+}
+
+.admin-sidebar button {
+  transition: none !important;
+}
+
+/* Règles spécifiques pour les états hover basiques */
+.admin-sidebar a:hover {
+  transition: none !important;
+}
+
+.admin-sidebar button:hover {
+  transition: none !important;
+}
+
+/* Désactiver les animations de timeline si elles affectent la sidebar */
+.admin-sidebar [data-timeline-item] {
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Désactiver les classes d'animation globales */
+.admin-sidebar .animate-fade-in,
+.admin-sidebar .animate-slide-up,
+.admin-sidebar .animate-scale-in,
+.admin-sidebar .hover-lift {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.admin-sidebar .hover-lift:hover {
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Suppression des animations de scroll reveal */
+.admin-sidebar .scroll-reveal,
+.admin-sidebar [class*="reveal"] {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Suppression des animations de card-lift */
+.admin-sidebar .card-lift,
+.admin-sidebar [class*="card"] {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}

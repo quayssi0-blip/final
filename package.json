@@ -7,7 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "biome:watch": "biome watch",
+    "biome:init": "biome init",
+    "tailwindcss:watch": "tailwindcss -i ./styles/tailwind.css -o ./styles/globals.css --watch",
+    "migrate": "node migrate-database.js",
+    "migrate:images": "node migrate-images.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
@@ -15,6 +20,7 @@
     "aos": "^2.3.4",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
     "jose": "^6.1.0",
     "lucide-react": "^0.548.0",
     "next": "16.0.0",

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
+import { useProjects } from "../../../../hooks/useProjects";
+import ImageUpload from "@/components/ImageUpload/ImageUpload";
 
 // Content builder components
 import ContentBuilderBlock from "@/components/blocks/ContentBuilderBlock.jsx";
@@ -53,17 +55,22 @@ const contentTypes = [
 
 export default function NewProjectPage() {
   const router = useRouter();
+  const { createProject, mutate } = useProjects();
   const [loading, setLoading] = useState(false);
+  const [imageUploaded, setImageUploaded] = useState(false);
+  const [currentImage, setCurrentImage] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
-    description: "",
-    content: [],
+    excerpt: "",
+    image: "",
+    categories: [],
+    start_date: "",
+    location: "",
+    people_helped: 0,
     status: "draft",
-    technologies: "",
-    client: "",
-    duration: "",
-    website: "",
+    content: [],
+    goals: [],
   });
   const [errors, setErrors] = useState({});
 
@@ -142,6 +149,15 @@ export default function NewProjectPage() {
     }
   };
 
+  const handleImageUploaded = (imageUrl) => {
+    setCurrentImage(imageUrl);
+    setFormData((prev) => ({
+      ...prev,
+      image: imageUrl,
+    }));
+    setImageUploaded(true);
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -156,8 +172,8 @@ export default function NewProjectPage() {
         "Slug can only contain lowercase letters, numbers, and hyphens";
     }
 
-    if (!formData.description.trim()) {
-      newErrors.description = "Description is required";
+    if (!formData.excerpt.trim()) {
+      newErrors.excerpt = "Excerpt is required";
     }
 
     // Content validation will be handled differently for content builder
@@ -176,13 +192,17 @@ export default function NewProjectPage() {
     setLoading(true);
 
     try {
-      // This would be replaced with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-
+      // Use the hook to create project
+      await createProject(formData);
+      
+      // Refresh the projects list
+      mutate();
+      
       // Success - redirect to projects list
       router.push("/admin/projects");
     } catch (error) {
-      setErrors({ submit: "Failed to create project. Please try again." });
+      console.error("Error creating project:", error.message);
+      setErrors({ submit: error.message });
     } finally {
       setLoading(false);
     }
@@ -262,6 +282,118 @@ export default function NewProjectPage() {
             )}
           </div>
 
+          {/* Excerpt */}
+          <div>
+            <label
+              htmlFor="excerpt"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Excerpt *
+            </label>
+            <textarea
+              id="excerpt"
+              name="excerpt"
+              value={formData.excerpt}
+              onChange={handleInputChange}
+              rows={3}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                errors.excerpt ? "border-red-300" : "border-gray-300"
+              }`}
+              placeholder="Brief description of the project"
+            />
+            {errors.excerpt && (
+              <p className="mt-1 text-sm text-red-600">{errors.excerpt}</p>
+            )}
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Image principale du projet
+            </label>
+            <ImageUpload
+              currentImage={currentImage}
+              onImageUploaded={handleImageUploaded}
+              type="project-main"
+              projectId={null} // New project, no ID yet
+            />
+          </div>
+
+          {/* Categories */}
+          <div>
+            <label
+              htmlFor="categories"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Categories (comma separated)
+            </label>
+            <input
+              type="text"
+              id="categories"
+              name="categories"
+              value={formData.categories}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="education, health, social"
+            />
+          </div>
+
+          {/* Start Date */}
+          <div>
+            <label
+              htmlFor="start_date"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Start Date
+            </label>
+            <input
+              type="date"
+              id="start_date"
+              name="start_date"
+              value={formData.start_date}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Location */}
+          <div>
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Location
+            </label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Casablanca, Morocco"
+            />
+          </div>
+
+          {/* People Helped */}
+          <div>
+            <label
+              htmlFor="people_helped"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Number of People Helped
+            </label>
+            <input
+              type="number"
+              id="people_helped"
+              name="people_helped"
+              value={formData.people_helped}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="100"
+            />
+          </div>
+
           {/* Status */}
           <div>
             <label
@@ -278,108 +410,10 @@ export default function NewProjectPage() {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="draft">Draft</option>
-              <option value="published">Published</option>
+              <option value="Actif">Actif</option>
+              <option value="Terminé">Terminé</option>
+              <option value="Archivé">Archivé</option>
             </select>
-          </div>
-
-          {/* Client */}
-          <div>
-            <label
-              htmlFor="client"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Client
-            </label>
-            <input
-              type="text"
-              id="client"
-              name="client"
-              value={formData.client}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Client name or company"
-            />
-          </div>
-
-          {/* Duration */}
-          <div>
-            <label
-              htmlFor="duration"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Duration
-            </label>
-            <input
-              type="text"
-              id="duration"
-              name="duration"
-              value={formData.duration}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="e.g., 3 months, 6 weeks"
-            />
-          </div>
-
-          {/* Website */}
-          <div>
-            <label
-              htmlFor="website"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Website URL
-            </label>
-            <input
-              type="url"
-              id="website"
-              name="website"
-              value={formData.website}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="https://example.com"
-            />
-          </div>
-
-          {/* Technologies */}
-          <div>
-            <label
-              htmlFor="technologies"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Technologies
-            </label>
-            <input
-              type="text"
-              id="technologies"
-              name="technologies"
-              value={formData.technologies}
-              onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="React, Node.js, MongoDB (comma separated)"
-            />
-          </div>
-
-          {/* Description */}
-          <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Short Description *
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              rows={3}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.description ? "border-red-300" : "border-gray-300"
-              }`}
-              placeholder="Brief description of the project"
-            />
-            {errors.description && (
-              <p className="mt-1 text-sm text-red-600">{errors.description}</p>
-            )}
           </div>
 
           {/* Content Builder */}
