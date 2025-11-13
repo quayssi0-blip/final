@@ -56,11 +56,440 @@ export default function ContentBlock({
   handleDragStart,
   handleDragOver,
   handleDrop,
+  isEditing = false, // New prop to determine if we're in editing mode
 }) {
   const Icon =
     contentTypes.find((type) => type.type === block.type)?.icon || Type;
 
   const renderBlockContent = () => {
+    if (isEditing) {
+      // Editing mode - render form inputs for each block type
+      switch (block.type) {
+        case "text":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <TextBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "image":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <ImageBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "list":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <ListBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "quote":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <QuoteBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "video":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <VideoBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "testimonial":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <TestimonialBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "stats":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <StatsBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "timeline":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <TimelineBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "faq":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <FaqBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "cta":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <CtaBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "file":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <FileBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "map":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <MapBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "award":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <AwardBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "programme":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <ProgrammeBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "services":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <ServicesBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "sponsorship":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <SponsorshipBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "impact":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <ImpactBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        case "team":
+          return (
+            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5 text-blue-600" />
+                  <span className="font-medium text-gray-900 capitalize">{block.type}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeContentBlock(block.id)}
+                  className="text-red-600 hover:text-red-800 transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <TeamBlock
+                block={block}
+                updateContentBlock={updateContentBlock}
+                removeContentBlock={removeContentBlock}
+              />
+            </div>
+          );
+        default:
+          return (
+            <div className="mb-6 p-4 bg-gray-100 rounded-lg text-center">
+              <p className="text-gray-500">
+                Type de bloc non supporté pour l'édition.
+              </p>
+            </div>
+          );
+      }
+    }
+
     // Display-only mode - render content without interactive components
     switch (block.type) {
       case "text":
@@ -410,7 +839,7 @@ export default function ContentBlock({
   };
 
   return (
-    <div className="content-block-display prose prose-lg max-w-none">
+    <div className={`content-block ${isEditing ? 'content-block-edit' : 'content-block-display prose prose-lg max-w-none'}`}>
       {renderBlockContent()}
     </div>
   );

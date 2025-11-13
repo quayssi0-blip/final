@@ -20,13 +20,30 @@ export default async function ProjectGalleryPage({ params }) {
 
   // Get all project images for this project
   const projectImages = project.project_images || [];
+  console.log("Gallery page project data:", {
+    title: project.title,
+    projectImagesCount: projectImages.length,
+    projectImages: projectImages.map(img => ({
+      id: img.id,
+      image_url: img.image_url,
+      alt_text: img.alt_text
+    }))
+  });
+
   const galleryUrls = projectImages
     .map((img) => {
       // Remove surrounding quotes if they exist
       const url = img.image_url ? img.image_url.replace(/^"|"$/g, "") : "";
+      console.log("Processing image URL:", {
+        original: img.image_url,
+        cleaned: url,
+        valid: url && url.trim() !== ""
+      });
       return url;
     })
     .filter((url) => url && url.trim() !== "");
+
+  console.log("Final gallery URLs:", galleryUrls);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FAFAFA" }}>
@@ -34,11 +51,7 @@ export default async function ProjectGalleryPage({ params }) {
       <UnifiedHero
         title={`Galerie Photos - ${project.title}`}
         subtitle="Découvrez tous les moments capturés lors de la réalisation de ce projet."
-        images={[
-          project.image || "/projects/foundation1.jpg",
-          "/projects/foundation2.jpg",
-          "/projects/foundation3.jpg",
-        ]}
+        images={galleryUrls.slice(0, 5)} // Use first 5 gallery images for slideshow
       />
 
       <Container className="p-20">

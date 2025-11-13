@@ -1,27 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, use } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Trash2, Check, X, CheckCheck, Edit, ExternalLink } from "lucide-react";
 import { useComments } from "../../../../hooks/useComments";
+import EditCommentModal from "../../../../components/EditCommentModal";
+import AdminCard from "../../../../components/AdminCard/AdminCard";
 
 export default function CommentDetailPage({ params }) {
   const router = useRouter();
-  const { id } = params;
-  const { 
-    data: allComments, 
-    isLoading, 
-    isError, 
-    deleteComment, 
-    approveComment, 
-    publishComment 
+  const searchParams = useSearchParams();
+  const { id } = use(params);
+  const {
+    data: allComments,
+    isLoading,
+    isError,
+    deleteComment,
+    approveComment,
+    publishComment,
+    updateComment
   } = useComments();
   
   const [comment, setComment] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     if (allComments && allComments.length > 0) {
@@ -29,6 +34,17 @@ export default function CommentDetailPage({ params }) {
       setComment(foundComment || null);
     }
   }, [allComments, id]);
+
+  useEffect(() => {
+    if (searchParams.get('edit') === 'true' && comment) {
+      setIsEditModalOpen(true);
+      // Remove the edit param from URL
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('edit');
+      const newUrl = `${window.location.pathname}${newSearchParams.toString() ? '?' + newSearchParams.toString() : ''}`;
+      router.replace(newUrl, { scroll: false });
+    }
+  }, [searchParams, comment, router]);
 
   const handleDelete = async () => {
     if (confirm("Êtes-vous sûr de vouloir supprimer ce commentaire ? Cette action est irréversible.")) {
@@ -68,6 +84,16 @@ export default function CommentDetailPage({ params }) {
       alert('Erreur lors de la publication du commentaire');
     } finally {
       setIsPublishing(false);
+    }
+  };
+
+  const handleEdit = async (commentId, updatedData) => {
+    try {
+      const updatedComment = await updateComment(commentId, updatedData);
+      setComment(updatedComment);
+    } catch (error) {
+      console.error('Error editing comment:', error);
+      throw error;
     }
   };
 
@@ -118,7 +144,7 @@ export default function CommentDetailPage({ params }) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-gray-600">Commentaire non trouvé.</p>
+          <p className="text-[var(--admin-text-muted)]">Commentaire non trouvé.</p>
           <Link href="/admin/comments" className="text-blue-600 hover:text-blue-800 mt-2 inline-block">
             Retour à la liste
           </Link>
@@ -130,46 +156,48 @@ export default function CommentDetailPage({ params }) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Link
-            href="/admin/comments"
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <ArrowLeft className="h-6 w-6" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Détail du Commentaire</h1>
-            <p className="text-gray-600">ID: {comment.id}</p>
+      <AdminCard className="page-header-card mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/admin/comments"
+              className="text-[var(--admin-text-muted)] hover:text-[var(--admin-text-secondary)]"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Link>
+            <div>
+              <h1 className="text-2xl font-bold text-[var(--admin-text-primary)]">Détail du Commentaire</h1>
+              <p className="text-[var(--admin-text-muted)]">ID: {comment.id}</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3">
+            {getStatusBadge(comment)}
           </div>
         </div>
-        <div className="flex items-center space-x-3">
-          {getStatusBadge(comment)}
-        </div>
-      </div>
+      </AdminCard>
 
       {/* Comment Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Comment Text */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Message</h2>
+          <AdminCard>
+            <h2 className="text-lg font-semibold text-[var(--admin-text-primary)] mb-4">Message</h2>
             <div className="prose max-w-none">
-              <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+              <p className="text-white leading-relaxed whitespace-pre-wrap">
                 {comment.message}
               </p>
             </div>
-          </div>
+          </AdminCard>
 
           {/* Blog Reference */}
           {comment.blogs && (
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Article associé</h2>
+            <AdminCard>
+              <h2 className="text-lg font-semibold text-[var(--admin-text-primary)] mb-4">Article associé</h2>
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-gray-900">{comment.blogs.title}</h3>
-                  <p className="text-sm text-gray-500">Slug: {comment.blogs.slug}</p>
+                  <h3 className="font-medium text-[var(--admin-text-primary)]">{comment.blogs.title}</h3>
+                  <p className="text-sm text-[var(--admin-text-muted)]">Slug: {comment.blogs.slug}</p>
                 </div>
                 <Link
                   href={`/blogs/${comment.blogs.slug}`}
@@ -180,47 +208,48 @@ export default function CommentDetailPage({ params }) {
                   Voir l'article
                 </Link>
               </div>
-            </div>
+            </AdminCard>
           )}
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Comment Info */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations</h2>
+          <AdminCard>
+            <h2 className="text-lg font-semibold text-[var(--admin-text-primary)] mb-4">Informations</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-500">Nom</label>
-                <p className="text-gray-900">{comment.name}</p>
+                <label className="block text-sm font-medium text-[var(--admin-text-muted)]">Nom</label>
+                <p className="text-[var(--admin-text-primary)]">{comment.name}</p>
               </div>
               {comment.email && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-500">Email</label>
-                  <p className="text-gray-900">{comment.email}</p>
+                  <label className="block text-sm font-medium text-[var(--admin-text-muted)]">Email</label>
+                  <p className="text-[var(--admin-text-primary)]">{comment.email}</p>
                 </div>
               )}
               <div>
-                <label className="block text-sm font-medium text-gray-500">Créé le</label>
-                <p className="text-gray-900">
+                <label className="block text-sm font-medium text-[var(--admin-text-muted)]">Créé le</label>
+                <p className="text-[var(--admin-text-primary)]">
                   {new Date(comment.created_at).toLocaleString('fr-FR')}
                 </p>
               </div>
               {comment.updated_at !== comment.created_at && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-500">Modifié le</label>
-                  <p className="text-gray-900">
+                  <label className="block text-sm font-medium text-[var(--admin-text-muted)]">Modifié le</label>
+                  <p className="text-[var(--admin-text-primary)]">
                     {new Date(comment.updated_at).toLocaleString('fr-FR')}
                   </p>
                 </div>
               )}
             </div>
-          </div>
+          </AdminCard>
 
           {/* Actions */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Actions</h2>
+          <AdminCard>
+            <h2 className="text-lg font-semibold text-[var(--admin-text-primary)] mb-4">Actions</h2>
             <div className="space-y-3">
+
               {!comment.is_approved && (
                 <button
                   onClick={handleApprove}
@@ -252,32 +281,40 @@ export default function CommentDetailPage({ params }) {
                 {isDeleting ? 'Suppression...' : 'Supprimer'}
               </button>
             </div>
-          </div>
+          </AdminCard>
 
           {/* Status Timeline */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Statut</h2>
+          <AdminCard>
+            <h2 className="text-lg font-semibold text-[var(--admin-text-primary)] mb-4">Statut</h2>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-gray-600">Commentaire créé</span>
+                <span className="text-sm text-[var(--admin-text-muted)]">Commentaire créé</span>
               </div>
               {comment.is_approved && (
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Approuvé par l'administrateur</span>
+                  <span className="text-sm text-[var(--admin-text-muted)]">Approuvé par l'administrateur</span>
                 </div>
               )}
               {comment.is_published && (
                 <div className="flex items-center space-x-3">
                   <div className="w-3 h-3 bg-green-600 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Publié et visible</span>
+                  <span className="text-sm text-[var(--admin-text-muted)]">Publié et visible</span>
                 </div>
               )}
             </div>
-          </div>
+          </AdminCard>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      <EditCommentModal
+        comment={comment}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSave={handleEdit}
+      />
     </div>
   );
 }

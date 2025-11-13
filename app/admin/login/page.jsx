@@ -1,33 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AdminLoginForm from "@/components/AdminLoginForm/AdminLoginForm";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function AdminLoginPage() {
-  const { login, isLoading, error, isAuthenticated } = useAuth();
   const router = useRouter();
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/admin/dashboard");
-    }
-  }, [isAuthenticated, router]);
+  const { login, isLoading, error } = useAuth();
 
   const handleLogin = async (formData) => {
     try {
-      await login({
+      console.log("DEBUG: Login page handleLogin called with email:", formData.email);
+      const response = await login({
         email: formData.email,
         password: formData.password,
       });
 
-      // Redirect to dashboard on successful login
-      router.push("/admin/dashboard");
+      console.log("DEBUG: Login completed successfully, auth state should be synced");
+
+      // Auth state will be handled by useEffect in AdminLayout
     } catch (err) {
       // Error is handled by the useAuth hook and passed to AdminLoginForm
-      console.error("Login failed:", err.message);
+      console.error("DEBUG: Login failed:", err.message);
     }
   };
 

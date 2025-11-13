@@ -4,8 +4,21 @@ import { supabaseFetcher } from "../lib/supabaseFetcher";
 import { toast } from "../lib/toastUtils";
 
 export function useAdmins() {
-  const key = ["admins"];
-  const { data, error, isLoading, mutate } = useSWR(key, supabaseFetcher);
+  const key = "admins";
+  const { data, error, isLoading, mutate } = useSWR(key, () => supabaseFetcher("admins"));
+
+  // Debug logging
+  console.log("useAdmins hook:", {
+    key,
+    data: data ? data.length : 0,
+    error,
+    isLoading,
+    firstAdmin: data?.[0] ? {
+      id: data[0].id,
+      email: data[0].email,
+      role: data[0].role
+    } : null
+  });
 
   const createAdmin = async (adminData) => {
     try {

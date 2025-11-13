@@ -9,6 +9,18 @@ export function useProjects() {
     supabaseFetcher("projects"),
   );
 
+  // Debug logging
+  console.log("useProjects hook:", {
+    data: data ? data.length : 0,
+    error,
+    isLoading,
+    firstProject: data?.[0] ? {
+      title: data[0].title,
+      image: data[0].image,
+      projectImages: data[0].project_images?.length || 0
+    } : null
+  });
+
   const createProject = async (projectData) => {
     try {
       const { error: createError } = await supabaseClient

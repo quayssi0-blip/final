@@ -13,6 +13,7 @@ import {
   LogOut,
   ChevronRight,
   MessageCircle,
+  Settings,
 } from "lucide-react";
 
 const AdminSidebar = ({ user }) => {
@@ -50,6 +51,12 @@ const AdminSidebar = ({ user }) => {
       permission: ["super_admin", "message_manager"],
     },
     {
+      name: "Paramètres",
+      href: "/admin/settings",
+      icon: <Settings className="h-5 w-5" />,
+      permission: ["super_admin"],
+    },
+    {
       name: "Administrateurs",
       href: "/admin/admins",
       icon: <Users className="h-5 w-5" />,
@@ -63,23 +70,20 @@ const AdminSidebar = ({ user }) => {
     return item.permission.includes(user?.role);
   });
 
+  // Code de débogage temporaire
+  console.log("Rôle de l'utilisateur:", user?.role);
+  console.log("Éléments filtrés:", filteredNavItems.map(item => item.name));
+
   return (
-    <aside
-      className="admin-sidebar w-64 shadow-lg h-screen sticky top-0 border-r border-gray-100"
-      style={{ backgroundColor: "white" }}
-    >
-      <div
-        className="p-8 border-b border-gray-100"
-        style={{ backgroundColor: "white" }}
-      >
+    <aside className="admin-sidebar w-64 shadow-lg h-screen fixed top-0">
+      <div className="p-8 border-b border-[var(--admin-border-light)]">
         <Link
           href="/admin/dashboard"
-          className="text-2xl font-bold hover:text-accent"
-          style={{ color: "#333333" }}
+          className="admin-heading-4 hover:text-[var(--admin-primary-600)] transition-colors"
         >
           Admin Assalam
         </Link>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="admin-body-small text-[var(--admin-text-muted)] mt-1">
           Bonjour, {user?.name || "Admin"}
         </p>
       </div>
@@ -96,22 +100,23 @@ const AdminSidebar = ({ user }) => {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className={`group relative flex items-center px-4 py-3 rounded-lg font-medium text-base
-                    focus:outline-none focus:ring-4 focus:ring-accent focus:ring-opacity-50
+                  className={`group relative flex items-center px-4 py-3 rounded-lg admin-body font-medium
+                    focus:outline-none focus:ring-4 focus:ring-[var(--admin-primary-500)] focus:ring-opacity-50
+                    transition-all duration-200
                     ${
                       isActive
-                        ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                        : "text-gray-700 hover:bg-gray-100"
+                        ? "bg-gradient-to-r from-[var(--admin-primary-600)] to-[var(--admin-primary-700)] text-[var(--admin-text-inverse)] shadow-md"
+                        : "text-[var(--admin-sidebar-text)] hover:bg-[var(--admin-sidebar-hover)] hover:text-[var(--admin-primary-700)]"
                     }`}
                 >
                   {isActive && (
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-white rounded-full"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-[var(--admin-text-inverse)] rounded-full"></div>
                   )}
                   <span
-                    className={`mr-4 ${
+                    className={`mr-4 transition-colors ${
                       isActive
-                        ? "text-white"
-                        : "text-blue-500"
+                        ? "text-[var(--admin-text-inverse)]"
+                        : "text-[var(--admin-primary-500)] group-hover:text-[var(--admin-primary-700)]"
                     }`}
                   >
                     {item.icon}
@@ -122,28 +127,18 @@ const AdminSidebar = ({ user }) => {
             );
           })}
 
-          <li className="pt-8 border-t border-gray-100 mt-8">
+          <li className="pt-8 border-t border-[var(--admin-border-light)] mt-8">
             <Link
               href="/"
-              className="group flex items-center px-4 py-3 hover:bg-gray-100 rounded-lg font-medium focus:outline-none focus:ring-4 focus:ring-accent focus:ring-opacity-50"
-              style={{ color: "#6495ED" }}
+              className="group flex items-center px-4 py-3 hover:bg-[var(--admin-bg-hover)] rounded-lg admin-body font-medium focus:outline-none focus:ring-4 focus:ring-[var(--admin-primary-500)] focus:ring-opacity-50 text-[var(--admin-primary-600)] hover:text-[var(--admin-primary-700)] transition-colors"
             >
               <Home className="h-5 w-5 mr-4" />
-              <span className="text-base">Retour à l'accueil</span>
+              <span>Retour à l'accueil</span>
             </Link>
           </li>
         </ul>
       </nav>
 
-      <div className="pt-4 mt-4 border-t border-gray-100 px-4">
-        <Link
-          href="/api/auth/logout"
-          className="flex items-center p-3 rounded-xl text-red-600 hover:bg-red-50"
-        >
-          <LogOut className="h-5 w-5 mr-3" />
-          <span className="text-sm font-medium">Déconnexion</span>
-        </Link>
-      </div>
     </aside>
   );
 };

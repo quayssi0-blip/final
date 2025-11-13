@@ -1,75 +1,71 @@
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+
 const AdminTable = ({ columns, data, renderActions, loading }) => (
-  <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+  <div className="admin-card overflow-hidden">
     {loading ? (
-      <div className="flex justify-center items-center p-12">
-        <div
-          className="animate-spin rounded-full h-8 w-8 border-4 border-transparent border-t-current"
-          style={{ color: "#6495ED" }}
-        />
-        <p className="ml-4 text-lg" style={{ color: "#333333" }}>
+      <div className="flex flex-col justify-center items-center p-12">
+        <LoadingSpinner />
+        <p className="mt-4 text-lg admin-body">
           Chargement des articles...
         </p>
       </div>
     ) : (
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead style={{ backgroundColor: "#B0E0E680" }}>
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider"
-                style={{ color: "#333333" }}
-              >
-                {column.label}
-              </th>
-            ))}
-            <th
-              className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider"
-              style={{ color: "#333333" }}
-            >
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {data.length === 0 ? (
+      <div className="overflow-x-auto">
+        <table className="admin-table min-w-full">
+          <thead className="bg-blue-50">
             <tr>
-              <td
-                colSpan={columns.length + 1}
-                className="px-6 py-8 text-center text-gray-500 italic"
-              >
-                Aucun article trouvé.
-              </td>
+              {columns.map((column) => (
+                <th
+                  key={column.key}
+                  className="admin-table-header px-6 py-4 text-left admin-body-small font-semibold uppercase tracking-wider text-blue-700"
+                >
+                  {column.label}
+                </th>
+              ))}
+              <th className="admin-table-header px-6 py-4 text-right admin-body-small font-semibold uppercase tracking-wider text-blue-700">
+                Actions
+              </th>
             </tr>
-          ) : (
-            data.map((item) => (
-              <tr
-                key={item.id}
-                className="hover:bg-gray-50 transition duration-150"
-              >
-                {columns.map((column) => (
-                  <td
-                    key={column.key}
-                    className="px-6 py-4 whitespace-nowrap text-sm"
-                    style={{ color: "#333333" }}
-                  >
-                    {column.render ? (
-                      column.render(item[column.key], item)
-                    ) : column.key === "title" ? (
-                      <p className="font-semibold">{item[column.key]}</p>
-                    ) : (
-                      item[column.key]
-                    )}
-                  </td>
-                ))}
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  {renderActions(item)}
+          </thead>
+          <tbody className="admin-table-body divide-y divide-gray-200">
+            {data.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={columns.length + 1}
+                  className="px-6 py-8 text-center admin-body text-gray-500 italic"
+                >
+                  Aucun article trouvé.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              data.map((item) => (
+                <tr
+                  key={item.id}
+                  className="admin-table-row hover:bg-blue-25 transition duration-150"
+                >
+                  {columns.map((column) => (
+                    <td
+                      key={column.key}
+                      className="admin-table-cell px-6 py-4 whitespace-nowrap admin-body"
+                    >
+                      {column.render ? (
+                        column.render(item[column.key], item)
+                      ) : column.key === "title" ? (
+                        <p className="admin-body font-semibold">{item[column.key]}</p>
+                      ) : (
+                        item[column.key]
+                      )}
+                    </td>
+                  ))}
+                  <td className="admin-table-cell px-6 py-4 whitespace-nowrap text-right admin-body font-medium">
+                    {renderActions(item)}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     )}
   </div>
 );

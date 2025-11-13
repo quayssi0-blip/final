@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { AdminsController } from "../../../lib/controllers/admins";
+import supabaseServer from "../../../lib/supabaseServer";
 
 export async function GET(request) {
   try {

@@ -1,0 +1,80 @@
+/* AdminButton Component Styles */
+.admin-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.admin-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.admin-btn-primary {
+  background: linear-gradient(135deg, var(--admin-primary-600), var(--admin-primary-700));
+  color: var(--admin-text-inverse);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.admin-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--admin-primary-700), var(--admin-primary-800));
+  box-shadow: var(--admin-shadow-md);
+  transform: translateY(-1px);
+}
+
+.admin-btn-secondary {
+  background: var(--admin-bg-secondary);
+  color: var(--admin-text-primary);
+  border: 1px solid var(--admin-border-medium);
+}
+
+.admin-btn-secondary:hover:not(:disabled) {
+  background: var(--admin-bg-hover);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.admin-btn-danger {
+  background: var(--admin-error);
+  color: white;
+}
+
+.admin-btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  box-shadow: 0 4px 6px -1px rgb(220 38 38 / 0.1);
+}
+
+.admin-btn-outline {
+  background: transparent;
+  color: var(--admin-primary-600);
+  border: 1px solid var(--admin-primary-600);
+}
+
+.admin-btn-outline:hover:not(:disabled) {
+  background: var(--admin-primary-50);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .admin-btn-primary {
+  background: linear-gradient(135deg, var(--admin-primary-500), var(--admin-primary-600));
+}
+
+[data-theme="dark"] .admin-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--admin-primary-600), var(--admin-primary-700));
+}
+
+[data-theme="dark"] .admin-btn-secondary {
+  background: var(--admin-neutral-700);
+  color: var(--admin-text-primary);
+  border-color: var(--admin-border-medium);
+}
+
+[data-theme="dark"] .admin-btn-secondary:hover:not(:disabled) {
+  background: var(--admin-neutral-600);
+}
+
+[data-theme="dark"] .admin-btn-outline {
+  color: var(--admin-primary-400);
+  border-color: var(--admin-primary-400);
+}
+
+[data-theme="dark"] .admin-btn-outline:hover:not(:disabled) {
+  background: var(--admin-primary-900);
+}

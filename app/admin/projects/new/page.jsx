@@ -116,6 +116,7 @@ export default function NewProjectPage() {
       handleDragStart={() => {}}
       handleDragOver={() => {}}
       handleDrop={() => {}}
+      isEditing={true}
     />
   );
 
@@ -213,12 +214,12 @@ export default function NewProjectPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Add New Project</h1>
-          <p className="text-gray-600">Create a new project showcase</p>
+          <h1 className="text-2xl font-bold text-[var(--admin-text-primary)]">Add New Project</h1>
+          <p className="text-[var(--admin-text-secondary)]">Create a new project showcase</p>
         </div>
         <Link
           href="/admin/projects"
-          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+          className="inline-flex items-center px-4 py-2 border border-[var(--admin-border-medium)] rounded-lg text-[var(--admin-text-primary)] hover:bg-[var(--admin-bg-hover)] transition-colors duration-200"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
           Back to Projects
@@ -226,11 +227,11 @@ export default function NewProjectPage() {
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-[var(--admin-bg-secondary)] rounded-lg shadow p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           {errors.submit && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-800 text-sm">{errors.submit}</p>
+            <div className="bg-[var(--admin-error)]/10 border border-[var(--admin-error)] rounded-lg p-4">
+              <p className="text-[var(--admin-error)] text-sm">{errors.submit}</p>
             </div>
           )}
 
@@ -238,7 +239,7 @@ export default function NewProjectPage() {
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
               Project Title *
             </label>
@@ -248,13 +249,13 @@ export default function NewProjectPage() {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.title ? "border-red-300" : "border-gray-300"
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent ${
+                errors.title ? "border-[var(--admin-error)]" : "border-[var(--admin-border-medium)]"
               }`}
               placeholder="Enter project title"
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+              <p className="mt-1 text-sm text-[var(--admin-error)]">{errors.title}</p>
             )}
           </div>
 
@@ -262,7 +263,7 @@ export default function NewProjectPage() {
           <div>
             <label
               htmlFor="slug"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
               Slug *
             </label>
@@ -272,13 +273,13 @@ export default function NewProjectPage() {
               name="slug"
               value={formData.slug}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.slug ? "border-red-300" : "border-gray-300"
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent ${
+                errors.slug ? "border-[var(--admin-error)]" : "border-[var(--admin-border-medium)]"
               }`}
               placeholder="project-slug"
             />
             {errors.slug && (
-              <p className="mt-1 text-sm text-red-600">{errors.slug}</p>
+              <p className="mt-1 text-sm text-[var(--admin-error)]">{errors.slug}</p>
             )}
           </div>
 

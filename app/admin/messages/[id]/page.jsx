@@ -22,12 +22,12 @@ export default function MessageDetailPage() {
         if (foundMessage) {
           setMessage(foundMessage);
           
-          // Automatically mark as read if not already read
-          if (!foundMessage.is_read) {
+          // Automatically mark as read if status is unread
+          if (foundMessage.status === "unread") {
             try {
-              await updateMessage(params.id, { is_read: true });
+              await updateMessage(params.id, { status: "read" });
               // Update local state
-              setMessage(prev => prev ? { ...prev, is_read: true } : null);
+              setMessage(prev => prev ? { ...prev, status: "read" } : null);
             } catch (error) {
               console.error("Failed to mark message as read:", error);
             }
@@ -47,7 +47,7 @@ export default function MessageDetailPage() {
   const handleDelete = async () => {
     if (
       confirm(
-        "Are you sure you want to delete this message? This action cannot be undone.",
+        "Êtes-vous sûr de vouloir supprimer ce message ? Cette action ne peut pas être annulée.",
       )
     ) {
       try {
@@ -82,17 +82,17 @@ export default function MessageDetailPage() {
     return (
       <div className="text-center py-12">
         <Mail className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-sm font-medium text-gray-900">
-          Message not found
+        <h3 className="mt-2 text-sm font-medium text-[var(--admin-text-primary)]">
+          Message non trouvé
         </h3>
-        <p className="mt-1 text-sm text-gray-500">
-          The message you're looking for doesn't exist.
+        <p className="mt-1 text-sm text-[var(--admin-text-muted)]">
+          Le message que vous recherchez n'existe pas.
         </p>
         <Link
           href="/admin/messages"
           className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
         >
-          Back to Messages
+          Retour aux Messages
         </Link>
       </div>
     );
@@ -103,17 +103,17 @@ export default function MessageDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Message Details</h1>
-          <p className="text-gray-600">
-            View and manage contact form submission
+          <h1 className="text-2xl font-bold text-[var(--admin-text-primary)]">Message Details</h1>
+          <p className="text-[var(--admin-text-muted)]">
+            Voir et gérer la soumission du formulaire de contact
           </p>
         </div>
         <Link
           href="/admin/messages"
-          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-[var(--admin-text-secondary)] hover:bg-gray-50 transition-colors duration-200"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to Messages
+          Retour aux Messages
         </Link>
       </div>
 
@@ -127,20 +127,20 @@ export default function MessageDetailPage() {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {/* Message Header */}
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          <h2 className="text-xl font-semibold text-[var(--admin-text-primary)] mb-4">
             {message.subject}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center">
               <User className="h-4 w-4 text-gray-400 mr-2" />
-              <span className="text-gray-600">From:</span>
+              <span className="text-[var(--admin-text-muted)]">From:</span>
               <span className="ml-2 font-medium">{message.name}</span>
             </div>
 
             <div className="flex items-center">
               <Mail className="h-4 w-4 text-gray-400 mr-2" />
-              <span className="text-gray-600">Email:</span>
+              <span className="text-[var(--admin-text-muted)]">Email:</span>
               <a
                 href={`mailto:${message.email}`}
                 className="ml-2 text-blue-600 hover:text-blue-800 hover:underline"
@@ -151,7 +151,7 @@ export default function MessageDetailPage() {
 
             <div className="flex items-center">
               <Calendar className="h-4 w-4 text-gray-400 mr-2" />
-              <span className="text-gray-600">Date:</span>
+              <span className="text-[var(--admin-text-muted)]">Date:</span>
               <span className="ml-2">{formatDate(message.created_at)}</span>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function MessageDetailPage() {
         {/* Message Body */}
         <div className="px-6 py-6">
           <div className="prose prose-gray max-w-none">
-            <pre className="whitespace-pre-wrap font-sans text-gray-700 leading-relaxed">
+            <pre className="whitespace-pre-wrap font-sans text-[var(--admin-text-secondary)] leading-relaxed">
               {message.message}
             </pre>
           </div>
@@ -169,7 +169,7 @@ export default function MessageDetailPage() {
         {/* Actions */}
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-[var(--admin-text-muted)]">
               Message ID: {message.id}
             </div>
 
@@ -184,7 +184,7 @@ export default function MessageDetailPage() {
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
               >
                 <Mail className="h-4 w-4 mr-2" />
-                Reply
+                Répondre
               </button>
 
               <button
@@ -192,7 +192,7 @@ export default function MessageDetailPage() {
                 className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete
+                Supprimer
               </button>
             </div>
           </div>
@@ -201,8 +201,8 @@ export default function MessageDetailPage() {
 
       {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
-          Quick Actions
+        <h3 className="text-lg font-medium text-[var(--admin-text-primary)] mb-4">
+          Actions Rapides
         </h3>
         <div className="flex flex-wrap gap-3">
           <button
@@ -215,21 +215,21 @@ export default function MessageDetailPage() {
             className="inline-flex items-center px-4 py-2 border border-blue-300 text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200"
           >
             <Mail className="h-4 w-4 mr-2" />
-            Send Email Reply
+            Envoyer une Réponse par Email
           </button>
 
           <button
             onClick={() => navigator.clipboard.writeText(message.email)}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 text-[var(--admin-text-secondary)] bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
           >
-            Copy Email Address
+            Copier l'Adresse Email
           </button>
 
           <button
             onClick={() => navigator.clipboard.writeText(message.message)}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 text-[var(--admin-text-secondary)] bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200"
           >
-            Copy Message Content
+            Copier le Contenu du Message
           </button>
         </div>
       </div>

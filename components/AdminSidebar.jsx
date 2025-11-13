@@ -15,57 +15,74 @@ import {
   Users,
   LayoutDashboard,
   FolderOpen,
-  Home,
+  Settings,
 } from "lucide-react";
 
 export default function AdminSidebar({ user }) {
   const pathname = usePathname();
 
   const navItems = [
-    {
-      name: "Tableau de Bord",
-      href: "/admin/dashboard",
-      icon: <LayoutDashboard className="h-5 w-5" />,
-      permission: ["super_admin", "content_manager", "message_manager"],
-    },
-    {
-      name: "Articles",
-      href: "/admin/blogs",
-      icon: <Newspaper className="h-5 w-5" />,
-      permission: ["super_admin", "content_manager"],
-    },
-    {
-      name: "Projets",
-      href: "/admin/projects",
-      icon: <FolderOpen className="h-5 w-5" />,
-      permission: ["super_admin", "content_manager"],
-    },
-    {
-      name: "Messages",
-      href: "/admin/messages",
-      icon: <MessageSquare className="h-5 w-5" />,
-      permission: ["super_admin", "message_manager"],
-    },
-    {
-      name: "Administrateurs",
-      href: "/admin/admins",
-      icon: <Users className="h-5 w-5" />,
-      permission: ["super_admin"],
-    },
-  ];
+   {
+     name: "Tableau de Bord",
+     href: "/admin/dashboard",
+     icon: <LayoutDashboard className="h-5 w-5" />,
+     permission: ["super_admin", "content_manager", "message_manager"],
+   },
+   {
+     name: "Administrateurs",
+     href: "/admin/admins",
+     icon: <Users className="h-5 w-5" />,
+     permission: ["super_admin"],
+   },
+   {
+     name: "Articles",
+     href: "/admin/blogs",
+     icon: <Newspaper className="h-5 w-5" />,
+     permission: ["super_admin", "content_manager"],
+   },
+   {
+     name: "Projets",
+     href: "/admin/projects",
+     icon: <FolderOpen className="h-5 w-5" />,
+     permission: ["super_admin", "content_manager"],
+   },
+   {
+     name: "Messages",
+     href: "/admin/messages",
+     icon: <MessageSquare className="h-5 w-5" />,
+     permission: ["super_admin", "message_manager"],
+   },
+   {
+     name: "Commentaires",
+     href: "/admin/comments",
+     icon: <MessageSquare className="h-5 w-5" />,
+     permission: ["super_admin", "content_manager"],
+   },
+   {
+     name: "Paramètres",
+     href: "/admin/settings",
+     icon: <Settings className="h-5 w-5" />,
+     permission: ["super_admin", "content_manager", "message_manager"],
+   },
+ ];
 
   // Functionality Preservation: Filter nav items based on user role
   const filteredNavItems = navItems.filter((item) => {
     if (user?.role === "content_manager") {
-      // content_manager: show dashboard, articles, and projects
+      // content_manager: show dashboard, articles, projects, and settings
       return (
         item.name === "Tableau de Bord" ||
         item.name === "Articles" ||
-        item.name === "Projets"
+        item.name === "Projets" ||
+        item.name === "Paramètres"
       );
     } else if (user?.role === "message_manager") {
-      // messages_manager: show dashboard and messages only
-      return item.name === "Tableau de Bord" || item.name === "Messages";
+      // messages_manager: show dashboard, messages, and settings only
+      return (
+        item.name === "Tableau de Bord" ||
+        item.name === "Messages" ||
+        item.name === "Paramètres"
+      );
     } else if (user?.role === "super_admin") {
       // super_admin: show all
       return true;
@@ -119,17 +136,6 @@ export default function AdminSidebar({ user }) {
               </Link>
             </li>
           ))}
-
-          {/* Home Link - Enhanced with blueprint button styling */}
-          <li className="pt-8 border-t border-gray-100 mt-8">
-            <Link
-              href="/"
-              className="group flex items-center px-4 py-3 text-accent hover:bg-primary-light/70 rounded-lg transition-all duration-300 font-medium hover:shadow-md hover:translate-x-1 focus:outline-none focus:ring-4 focus:ring-accent focus:ring-opacity-50 card-lift"
-            >
-              <Home className="h-5 w-5 mr-4 transition-transform group-hover:scale-110 duration-300" />
-              <span className="text-base">Retour à l'accueil</span>
-            </Link>
-          </li>
         </ul>
       </nav>
     </aside>

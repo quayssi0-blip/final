@@ -24,18 +24,35 @@ const ProjectGallery = ({ images, projectTitle, className = "" }) => {
 
   // Memoize cleaned and validated images to prevent unnecessary re-processing
   const processedImages = useMemo(() => {
-    if (!Array.isArray(images)) return [];
+    console.log("ProjectGallery processing images:", {
+      inputImages: images,
+      inputLength: images?.length || 0
+    });
 
-    return images
-      .map((imageSrc) => {
-        if (!imageSrc || typeof imageSrc !== "string") return null;
+    if (!Array.isArray(images)) {
+      console.warn("ProjectGallery: images prop is not an array", images);
+      return [];
+    }
+
+    const result = images
+      .map((imageSrc, index) => {
+        if (!imageSrc || typeof imageSrc !== "string") {
+          console.warn(`ProjectGallery: invalid image source at index ${index}:`, imageSrc);
+          return null;
+        }
         const cleanUrl = imageSrc.replace(/^"|"$/g, "");
-        return cleanUrl &&
-          (cleanUrl.startsWith("http") || cleanUrl.startsWith("/"))
-          ? cleanUrl
-          : null;
+        const isValid = cleanUrl && (cleanUrl.startsWith("http") || cleanUrl.startsWith("/"));
+        console.log(`ProjectGallery: processing image ${index}:`, {
+          original: imageSrc,
+          cleaned: cleanUrl,
+          valid: isValid
+        });
+        return isValid ? cleanUrl : null;
       })
       .filter(Boolean);
+
+    console.log("ProjectGallery: final processed images:", result);
+    return result;
   }, [images]);
 
   const openModal = (index) => {

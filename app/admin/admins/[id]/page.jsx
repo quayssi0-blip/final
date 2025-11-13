@@ -5,6 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
 import { useAdmins } from "../../../../hooks/useAdmins";
+import AdminCard from "../../../../components/AdminCard/AdminCard";
+import AdminButton from "../../../../components/AdminButton/AdminButton";
+import AdminInput from "../../../../components/AdminInput/AdminInput";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 
 export default function EditAdminPage() {
   const params = useParams();
@@ -59,13 +63,13 @@ export default function EditAdminPage() {
     const newErrors = {};
 
     if (!formData.email) {
-      newErrors.email = "Email is required";
+      newErrors.email = "L'email est requis";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
+      newErrors.email = "Veuillez saisir une adresse email valide";
     }
 
     if (!formData.role) {
-      newErrors.role = "Role is required";
+      newErrors.role = "Le rôle est requis";
     }
 
     setErrors(newErrors);
@@ -98,7 +102,7 @@ export default function EditAdminPage() {
   const handleDelete = async () => {
     if (
       confirm(
-        "Are you sure you want to delete this admin? This action cannot be undone.",
+        "Êtes-vous sûr de vouloir supprimer cet administrateur ? Cette action ne peut pas être annulée.",
       )
     ) {
       try {
@@ -117,7 +121,7 @@ export default function EditAdminPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <LoadingSpinner size="large" />
       </div>
     );
   }
@@ -127,60 +131,51 @@ export default function EditAdminPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Edit Administrator
+          <h1 className="text-2xl font-bold text-[var(--admin-text-primary)]">
+            Modifier l'Administrateur
           </h1>
-          <p className="text-gray-600">
-            Update administrator information and permissions
+          <p className="text-[var(--admin-text-muted)]">
+            Mettre à jour les informations et permissions de l'administrateur
           </p>
         </div>
-        <Link
+        <AdminButton
+          variant="secondary"
+          as={Link}
           href="/admin/admins"
-          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to Admins
-        </Link>
+          Retour aux Administrateurs
+        </AdminButton>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <AdminCard className="mt-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           {errors.submit && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <AdminCard className="bg-red-50 border-red-200">
               <p className="text-red-800 text-sm">{errors.submit}</p>
-            </div>
+            </AdminCard>
           )}
 
           {/* Email */}
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Email Address *
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.email ? "border-red-300" : "border-gray-300"
-              }`}
-              placeholder="admin@example.com"
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-            )}
-          </div>
+          <AdminInput
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            error={!!errors.email}
+            required
+            label="Adresse Email"
+            placeholder="admin@exemple.com"
+            helperText={errors.email}
+          />
 
           {/* Role */}
           <div>
             <label
               htmlFor="role"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Role *
             </label>
@@ -189,13 +184,13 @@ export default function EditAdminPage() {
               name="role"
               value={formData.role}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ${
                 errors.role ? "border-red-300" : "border-gray-300"
               }`}
             >
-              <option value="content_manager">Content Manager</option>
-              <option value="message_manager">Message Manager</option>
-              <option value="super_admin">Super Admin</option>
+              <option value="content_manager">Gestionnaire de Contenu</option>
+              <option value="message_manager">Gestionnaire de Messages</option>
+              <option value="super_admin">Super Administrateur</option>
             </select>
             {errors.role && (
               <p className="mt-1 text-sm text-red-600">{errors.role}</p>
@@ -204,43 +199,33 @@ export default function EditAdminPage() {
 
           {/* Submit Buttons */}
           <div className="flex justify-between">
-            <button
-              type="button"
+            <AdminButton
+              variant="danger"
               onClick={handleDelete}
-              className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
             >
               <Trash2 className="h-5 w-5 mr-2" />
-              Delete Admin
-            </button>
+              Supprimer l'Admin
+            </AdminButton>
 
             <div className="flex space-x-3">
-              <Link
+              <AdminButton
+                variant="secondary"
+                as={Link}
                 href="/admin/admins"
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
               >
-                Cancel
-              </Link>
-              <button
+                Annuler
+              </AdminButton>
+              <AdminButton
                 type="submit"
-                disabled={saving}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                loading={saving}
               >
-                {saving ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-5 w-5 mr-2" />
-                    Save Changes
-                  </>
-                )}
-              </button>
+                <Save className="h-5 w-5 mr-2" />
+                Sauvegarder les Modifications
+              </AdminButton>
             </div>
           </div>
         </form>
-      </div>
+      </AdminCard>
     </div>
   );
 }

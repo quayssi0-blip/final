@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./../styles/admin-theme.css";
 
 :root {
   --background: #ffffff;
@@ -10,6 +11,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Admin theme extensions */
+  --color-admin-primary: var(--admin-primary-500);
+  --color-admin-secondary: var(--admin-neutral-500);
+  --color-admin-success: var(--admin-success);
+  --color-admin-warning: var(--admin-warning);
+  --color-admin-error: var(--admin-error);
+  --color-admin-background: var(--admin-bg-primary);
+  --color-admin-surface: var(--admin-bg-secondary);
+  --color-admin-text: var(--admin-text-primary);
+  --color-admin-text-secondary: var(--admin-text-secondary);
 }
 
 @media (prefers-color-scheme: dark) {

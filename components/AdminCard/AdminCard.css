@@ -1,0 +1,22 @@
+/* AdminCard Component Styles */
+.admin-card {
+  background: var(--admin-bg-secondary);
+  border-color: var(--admin-border-light);
+  transition: all var(--admin-transition-normal);
+}
+
+.admin-card:hover {
+  border-color: var(--admin-border-medium);
+  box-shadow: var(--admin-shadow-md);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .admin-card {
+  background: var(--admin-bg-secondary);
+  border-color: var(--admin-border-medium);
+}
+
+[data-theme="dark"] .admin-card:hover {
+  border-color: var(--admin-border-light);
+  background: var(--admin-bg-hover);
+}

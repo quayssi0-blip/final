@@ -1,0 +1,96 @@
+/* AdminInput Component Styles */
+.admin-input-wrapper {
+  position: relative;
+}
+
+.admin-input-label {
+  color: var(--admin-text-primary);
+}
+
+.admin-input {
+  background: var(--admin-bg-secondary);
+  border-color: var(--admin-border-medium);
+  color: var(--admin-text-primary);
+}
+
+.admin-input:focus {
+  border-color: var(--admin-primary-500);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+
+.admin-input::placeholder {
+  color: var(--admin-text-muted);
+}
+
+.admin-input:disabled {
+  background: var(--admin-bg-hover);
+  cursor: not-allowed;
+}
+
+/* Error state */
+.admin-input.error {
+  border-color: var(--admin-error);
+}
+
+.admin-input.error:focus {
+  border-color: var(--admin-error);
+  box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
+}
+
+/* Success state */
+.admin-input.success {
+  border-color: var(--admin-success);
+}
+
+.admin-input.success:focus {
+  border-color: var(--admin-success);
+  box-shadow: 0 0 0 3px rgb(16 185 129 / 0.1);
+}
+
+.admin-input-helper {
+  color: var(--admin-text-muted);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .admin-input-label {
+  color: var(--admin-text-primary);
+}
+
+[data-theme="dark"] .admin-input {
+  background: var(--admin-bg-secondary);
+  border-color: var(--admin-border-medium);
+  color: var(--admin-text-primary);
+}
+
+[data-theme="dark"] .admin-input:focus {
+  border-color: var(--admin-primary-400);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.2);
+}
+
+[data-theme="dark"] .admin-input::placeholder {
+  color: var(--admin-text-muted);
+}
+
+[data-theme="dark"] .admin-input:disabled {
+  background: var(--admin-bg-active);
+}
+
+[data-theme="dark"] .admin-input.error {
+  border-color: #ef4444;
+}
+
+[data-theme="dark"] .admin-input.error:focus {
+  box-shadow: 0 0 0 3px rgb(239 68 68 / 0.2);
+}
+
+[data-theme="dark"] .admin-input.success {
+  border-color: var(--admin-success);
+}
+
+[data-theme="dark"] .admin-input.success:focus {
+  box-shadow: 0 0 0 3px rgb(16 185 129 / 0.2);
+}
+
+[data-theme="dark"] .admin-input-helper {
+  color: var(--admin-text-muted);
+}

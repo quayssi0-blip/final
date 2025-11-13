@@ -10,6 +10,7 @@ import {
   CheckCircle,
   Loader2,
 } from "lucide-react";
+import AdminCard from "@/components/AdminCard/AdminCard";
 import { useSettings } from "../../../hooks/useSettings";
 
 /**
@@ -192,7 +193,7 @@ export default function SettingsPage() {
       });
 
       if (response.ok) {
-        setSuccessMessage("Settings saved successfully!");
+        setSuccessMessage("Paramètres sauvegardés avec succès !");
 
         setTimeout(() => {
           setSuccessMessage("");
@@ -201,13 +202,13 @@ export default function SettingsPage() {
         const errorData = await response.json();
         setErrors({
           submit:
-            errorData.error || "Failed to save settings. Please try again.",
+            errorData.error || "Échec de la sauvegarde des paramètres. Veuillez réessayer.",
         });
       }
     } catch (error) {
       console.error("Settings save error:", error);
       setErrors({
-        submit: "Network error. Please check your connection and try again.",
+        submit: "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
       });
     } finally {
       setLoading(false);
@@ -249,46 +250,48 @@ export default function SettingsPage() {
   // --- Component Structure (Rest of the component remains the same, but with cleaner onChange props) ---
   
   const tabs = [
-    { id: "general", label: "General", icon: <Globe className="h-5 w-5" /> },
+    { id: "general", label: "Général", icon: <Globe className="h-5 w-5" /> },
     {
       id: "notifications",
       label: "Notifications",
       icon: <Bell className="h-5 w-5" />,
     },
-    { id: "security", label: "Security", icon: <Shield className="h-5 w-5" /> },
+    { id: "security", label: "Sécurité", icon: <Shield className="h-5 w-5" /> },
     {
       id: "appearance",
-      label: "Appearance",
+      label: "Apparence",
       icon: <Palette className="h-5 w-5" />,
     },
   ];
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600">
-          Manage your application settings and preferences
-        </p>
-      </div>
-
-      {/* Settings Content */}
-      
-      {/* Affichage du chargement des données initiales */}
-      {isSettingsLoading && (
-        <div className="bg-white rounded-lg shadow p-6 flex items-center justify-center">
-          <div className="flex items-center space-x-2 text-gray-600">
-            <Loader2 className="h-5 w-5 animate-spin" />
-            <span>Loading settings...</span>
+      <AdminCard className="page-header-card mb-6">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-[var(--admin-text-primary)] mb-2">Paramètres</h1>
+            <p className="text-[var(--admin-text-muted)] text-lg">Gérez les paramètres et préférences de votre application</p>
           </div>
         </div>
+      </AdminCard>
+
+      {/* Settings Content */}
+
+      {/* Affichage du chargement des données initiales */}
+      {isSettingsLoading && (
+        <AdminCard className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-[var(--admin-text-muted)]">Chargement des paramètres...</p>
+          </div>
+        </AdminCard>
       )}
 
       {/* Contenu du formulaire - affiché seulement si les données sont chargées */}
       {!isSettingsLoading && (
-        <div className="bg-white rounded-lg shadow">
-          <div className="border-b border-gray-200">
+        <AdminCard>
+          <div className="border-b border-[var(--admin-border-light)]">
             <nav className="flex space-x-8 px-6">
               {tabs.map((tab) => (
                 <button
@@ -296,8 +299,8 @@ export default function SettingsPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
                     activeTab === tab.id
-                      ? "border-blue-500 text-blue-600"
-                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                      ? "border-[var(--admin-primary-500)] text-[var(--admin-primary-600)]"
+                      : "border-transparent text-[var(--admin-text-muted)] hover:text-[var(--admin-text-secondary)] hover:border-[var(--admin-border-medium)]"
                   }`}
                 >
                   {tab.icon}
@@ -307,20 +310,22 @@ export default function SettingsPage() {
             </nav>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-6 px-6 pt-6">
           {/* Success Message */}
           {successMessage && (
-            <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center space-x-3">
-              <CheckCircle className="h-5 w-5 text-green-600" />
-              <p className="text-green-800 text-sm">{successMessage}</p>
-            </div>
+            <AdminCard className="bg-green-50 border-green-200">
+              <div className="flex items-center space-x-3">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <p className="text-green-800 text-sm">{successMessage}</p>
+              </div>
+            </AdminCard>
           )}
 
           {/* Error Message */}
           {errors.submit && (
-            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <AdminCard className="bg-red-50 border-red-200">
               <p className="text-red-800 text-sm">{errors.submit}</p>
-            </div>
+            </AdminCard>
           )}
 
           {/* General Settings */}
@@ -328,52 +333,52 @@ export default function SettingsPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
                 <Globe className="h-6 w-6 text-gray-400" />
-                <h2 className="text-lg font-medium text-gray-900">
-                  General Settings
+                <h2 className="text-lg font-medium text-[var(--admin-text-primary)]">
+                  Paramètres Généraux
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-6">
                 <div>
                   <label
                     htmlFor="siteName"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Site Name
+                    Nom du Site
                   </label>
                   <input
                     type="text"
                     id="siteName"
                     value={settings.general.siteName}
                     // Use the helper handler
-                    onChange={handleTextSelectChange("general", "siteName")} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={handleTextSelectChange("general", "siteName")}
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="siteDescription"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Site Description
+                    Description du Site
                   </label>
                   <textarea
                     id="siteDescription"
                     rows={3}
                     value={settings.general.siteDescription}
                     // Use the helper handler
-                    onChange={handleTextSelectChange("general", "siteDescription")} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={handleTextSelectChange("general", "siteDescription")}
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="contactEmail"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Contact Email
+                    Email de Contact
                   </label>
                   <input
                     type="email"
@@ -381,23 +386,23 @@ export default function SettingsPage() {
                     value={settings.general.contactEmail}
                     // Use the helper handler
                     onChange={handleTextSelectChange("general", "contactEmail")}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="timezone"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Timezone
+                    Fuseau Horaire
                   </label>
                   <select
                     id="timezone"
                     value={settings.general.timezone}
                     // Use the helper handler
                     onChange={handleTextSelectChange("general", "timezone")}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   >
                     <option value="UTC">UTC</option>
                     <option value="EST">EST</option>
@@ -413,19 +418,19 @@ export default function SettingsPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
                 <Bell className="h-6 w-6 text-gray-400" />
-                <h2 className="text-lg font-medium text-gray-900">
-                  Notification Settings
+                <h2 className="text-lg font-medium text-[var(--admin-text-primary)]">
+                  Paramètres de Notifications
                 </h2>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">
-                      Email Notifications
+                    <h3 className="text-sm font-medium text-[var(--admin-text-primary)]">
+                      Notifications par Email
                     </h3>
-                    <p className="text-sm text-gray-500">
-                      Receive email notifications for important events
+                    <p className="text-sm text-[var(--admin-text-muted)]">
+                      Recevoir des notifications par email pour les événements importants
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -442,11 +447,11 @@ export default function SettingsPage() {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">
-                      New Message Alerts
+                    <h3 className="text-sm font-medium text-[var(--admin-text-primary)]">
+                      Alertes de Nouveaux Messages
                     </h3>
-                    <p className="text-sm text-gray-500">
-                      Get notified when new messages are received
+                    <p className="text-sm text-[var(--admin-text-muted)]">
+                      Être notifié lors de la réception de nouveaux messages
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -463,11 +468,11 @@ export default function SettingsPage() {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">
-                      Weekly Reports
+                    <h3 className="text-sm font-medium text-[var(--admin-text-primary)]">
+                      Rapports Hebdomadaires
                     </h3>
-                    <p className="text-sm text-gray-500">
-                      Receive weekly summary reports
+                    <p className="text-sm text-[var(--admin-text-muted)]">
+                      Recevoir des rapports de synthèse hebdomadaires
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -490,19 +495,19 @@ export default function SettingsPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
                 <Shield className="h-6 w-6 text-gray-400" />
-                <h2 className="text-lg font-medium text-gray-900">
-                  Security Settings
+                <h2 className="text-lg font-medium text-[var(--admin-text-primary)]">
+                  Paramètres de Sécurité
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">
-                      Two-Factor Authentication
+                    <h3 className="text-sm font-medium text-[var(--admin-text-primary)]">
+                      Authentification à Deux Facteurs
                     </h3>
-                    <p className="text-sm text-gray-500">
-                      Add an extra layer of security to your account
+                    <p className="text-sm text-[var(--admin-text-muted)]">
+                      Ajouter une couche de sécurité supplémentaire à votre compte
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -520,9 +525,9 @@ export default function SettingsPage() {
                 <div>
                   <label
                     htmlFor="sessionTimeout"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Session Timeout (minutes)
+                    Expiration de Session (minutes)
                   </label>
                   <input
                     type="number"
@@ -532,16 +537,16 @@ export default function SettingsPage() {
                     value={settings.security.sessionTimeout}
                     // Use the helper handler
                     onChange={handleNumberChange("security", "sessionTimeout")}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="passwordMinLength"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Minimum Password Length
+                    Longueur Minimale du Mot de Passe
                   </label>
                   <input
                     type="number"
@@ -551,7 +556,7 @@ export default function SettingsPage() {
                     value={settings.security.passwordMinLength}
                     // Use the helper handler
                     onChange={handleNumberChange("security", "passwordMinLength")}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -563,8 +568,8 @@ export default function SettingsPage() {
             <div className="space-y-6">
               <div className="flex items-center space-x-3">
                 <Palette className="h-6 w-6 text-gray-400" />
-                <h2 className="text-lg font-medium text-gray-900">
-                  Appearance Settings
+                <h2 className="text-lg font-medium text-[var(--admin-text-primary)]">
+                  Paramètres d'Apparence
                 </h2>
               </div>
 
@@ -572,36 +577,36 @@ export default function SettingsPage() {
                 <div>
                   <label
                     htmlFor="theme"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Theme
+                    Thème
                   </label>
                   <select
                     id="theme"
                     value={settings.appearance.theme}
                     // Use the helper handler
                     onChange={handleTextSelectChange("appearance", "theme")}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   >
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                    <option value="auto">Auto (System)</option>
+                    <option value="light">Clair</option>
+                    <option value="dark">Sombre</option>
+                    <option value="auto">Auto (Système)</option>
                   </select>
                 </div>
 
                 <div>
                   <label
                     htmlFor="language"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Language
+                    Langue
                   </label>
                   <select
                     id="language"
                     value={settings.appearance.language}
                     // Use the helper handler
                     onChange={handleTextSelectChange("appearance", "language")}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   >
                     <option value="en">English</option>
                     <option value="fr">Français</option>
@@ -612,16 +617,16 @@ export default function SettingsPage() {
                 <div>
                   <label
                     htmlFor="dateFormat"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
                   >
-                    Date Format
+                    Format de Date
                   </label>
                   <select
                     id="dateFormat"
                     value={settings.appearance.dateFormat}
                     // Use the helper handler
                     onChange={handleTextSelectChange("appearance", "dateFormat")}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
                   >
                     <option value="DD/MM/YYYY">DD/MM/YYYY</option>
                     <option value="MM/DD/YYYY">MM/DD/YYYY</option>
@@ -633,27 +638,27 @@ export default function SettingsPage() {
           )}
 
           {/* Save Button */}
-          <div className="flex justify-end pt-6 border-t border-gray-200">
+          <div className="flex justify-end pt-6 border-t border-[var(--admin-border-light)]">
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center px-4 py-2 bg-[var(--admin-primary-600)] text-[var(--admin-text-inverse)] rounded-lg hover:bg-[var(--admin-primary-700)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Saving...
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--admin-text-inverse)] mr-2"></div>
+                  Sauvegarde...
                 </>
               ) : (
                 <>
                   <Save className="h-5 w-5 mr-2" />
-                  Save Settings
+                  Sauvegarder les Paramètres
                 </>
               )}
             </button>
           </div>
         </form>
-        </div>
+      </AdminCard>
       )}
     </div>
   );

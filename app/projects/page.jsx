@@ -15,12 +15,22 @@ export default function ProjectsPage() {
 
   // Transform projects data for ContentCard component
   const projects =
-    allProjects?.map((project) => ({
-      title: project.title,
-      excerpt: project.excerpt,
-      image: project.image || "/placeholder-project.jpg",
-      link: `/projects/${project.slug}`,
-    })) || [];
+    allProjects?.map((project) => {
+      // Debug logging for each project
+      console.log("Processing project:", {
+        title: project.title,
+        image: project.image,
+        projectImagesCount: project.project_images?.length || 0,
+        projectImages: project.project_images
+      });
+
+      return {
+        title: project.title,
+        excerpt: project.excerpt,
+        image: project.image || "/placeholder-project.jpg",
+        link: `/projects/${project.slug}`,
+      };
+    }) || [];
 
   return (
     <div className="space-y-16">
@@ -260,12 +270,6 @@ export default function ProjectsPage() {
               nécessaire.
             </p>
             <div className="flex justify-center gap-4 flex-wrap">
-              <a
-                href="/contact?type=donation"
-                className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition-colors duration-300"
-              >
-                Faire un Don
-              </a>
               <a
                 href="/contact?type=volunteer"
                 className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg font-semibold transition-colors duration-300"

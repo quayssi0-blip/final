@@ -1,0 +1,41 @@
+/* AdminBadge Component Styles */
+.admin-badge-success {
+  background: var(--admin-success);
+  color: white;
+}
+
+.admin-badge-warning {
+  background: var(--admin-warning);
+  color: #92400e; /* Dark brown text for yellow background */
+}
+
+.admin-badge-error {
+  background: var(--admin-error);
+  color: white;
+}
+
+.admin-badge-info {
+  background: var(--admin-primary-100);
+  color: var(--admin-primary-800);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .admin-badge-success {
+  background: #16a34a; /* Darker green */
+  color: white;
+}
+
+[data-theme="dark"] .admin-badge-warning {
+  background: #ca8a04; /* Darker yellow */
+  color: #1c1917; /* Very dark text */
+}
+
+[data-theme="dark"] .admin-badge-error {
+  background: #dc2626; /* Darker red */
+  color: white;
+}
+
+[data-theme="dark"] .admin-badge-info {
+  background: var(--admin-primary-800);
+  color: var(--admin-primary-100);
+}

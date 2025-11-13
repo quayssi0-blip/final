@@ -18,6 +18,7 @@ import TimelineSection from "@/components/TimelineSection/TimelineSection";
 // Custom hooks
 import { useProjects } from "@/hooks/useProjects.js";
 import { useBlogs } from "@/hooks/useBlogs.js";
+import { useProjectImages } from "@/hooks/useProjectImages.js";
 
 // Design System Configuration
 const DESIGN_SYSTEM = {
@@ -57,6 +58,11 @@ export default function Home() {
     isLoading: blogsLoading,
     isError: blogsError,
   } = useBlogs();
+  const {
+    projectImages: allProjectImages,
+    isLoading: projectImagesLoading,
+    isError: projectImagesError,
+  } = useProjectImages();
 
   // Transform projects data for ContentCard component
   const projects =
@@ -78,6 +84,11 @@ export default function Home() {
       category: blog.category,
       createdAt: new Date(blog.created_at).toISOString().split("T")[0],
     })) || [];
+
+  // Select 1 random image from project images for the "Pourquoi Nous Choisir" section
+  const randomImage = allProjectImages?.length > 0
+    ? allProjectImages[Math.floor(Math.random() * allProjectImages.length)].image_url
+    : ImageText[0]; // Fallback to first static image if no project images
   return (
     // FIX: Replace bg-background with inline style
     <div style={{ backgroundColor: "#FAFAFA" }}>
@@ -184,7 +195,7 @@ export default function Home() {
             <ImageTextSection
               title="Pourquoi Nous Choisir"
               subtitle="Fondée en 1992, notre action s'ancre dans une **expertise locale** et une **transparence totale**. Nous créons des changements durables en investissant dans la **dignité** et l'**autonomie**."
-              imageSrc={ImageText}
+              imageSrc={randomImage}
               imageAlt="Centre Himaya - Notre engagement pour la communauté"
               imagePosition="right"
               features={[
@@ -307,12 +318,6 @@ export default function Home() {
             au Maroc. Votre action crée un impact **durable**.
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
-            <Link
-              href="/contact?type=donation"
-              className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition-colors duration-300"
-            >
-              Faire un Don
-            </Link>
             <Link
               href="/contact?type=volunteer"
               className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg font-semibold transition-colors duration-300"

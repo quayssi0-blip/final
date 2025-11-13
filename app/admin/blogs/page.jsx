@@ -5,6 +5,11 @@ import Link from "next/link";
 import { Pencil, Trash2, Plus, Search, Eye } from "lucide-react";
 import StatusBadge from "@/components/StatusBadge";
 import { useBlogs } from "@/hooks/useBlogs";
+import AdminTable from "@/components/AdminTable/AdminTable";
+import AdminButton from "@/components/AdminButton/AdminButton";
+import AdminBadge from "@/components/AdminBadge/AdminBadge";
+import AdminCard from "@/components/AdminCard/AdminCard";
+import AdminInput from "@/components/AdminInput/AdminInput";
 
 export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,151 +41,151 @@ export default function BlogsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
+      <AdminCard className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 bg-[var(--admin-primary-600)] mx-auto mb-4"></div>
+          <p className="text-[var(--admin-text-secondary)]">Chargement des articles...</p>
+        </div>
+      </AdminCard>
     );
   }
 
   if (isError) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <AdminCard className="flex items-center justify-center h-64">
         <div className="text-center">
-          <p className="text-red-600 mb-4">Failed to load blog posts</p>
-          <button
+          <p className="text-[var(--admin-error)] mb-4">Erreur lors du chargement des articles</p>
+          <AdminButton
+            variant="primary"
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            Retry
-          </button>
+            Réessayer
+          </AdminButton>
         </div>
-      </div>
+      </AdminCard>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Blog Posts</h1>
-          <p className="text-gray-600">Manage blog content and articles</p>
+      <AdminCard className="page-header-card mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-[var(--admin-text-primary)] mb-2">Gestion des Articles</h1>
+            <p className="text-[var(--admin-text-secondary)] text-lg">Gérez votre contenu et vos articles</p>
+          </div>
+          <AdminButton variant="primary" size="lg">
+            <Plus className="h-5 w-5 mr-2" />
+            <Link href="/admin/blogs/new" className="text-[var(--admin-text-inverse)]">Nouvel Article</Link>
+          </AdminButton>
         </div>
-        <Link
-          href="/admin/blogs/new"
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Add New Post
-        </Link>
-      </div>
+      </AdminCard>
 
-      {/* Search */}
-      <div className="bg-white p-4 rounded-lg shadow">
-        <div className="relative">
-          <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search blog posts..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+      {/* Search and Filter Section */}
+      <AdminCard>
+        <div className="search-filter-section">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-3 h-5 w-5 text-[var(--admin-text-muted)]" />
+            <AdminInput
+              type="text"
+              placeholder="Rechercher des articles..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border-[var(--admin-border-medium)] focus:border-[var(--admin-primary-500)] focus:ring-[var(--admin-primary-500)]"
+            />
+          </div>
+          <div className="filter-buttons flex space-x-3 mt-4">
+            <AdminButton variant="secondary" size="sm">
+              Tous les statuts
+            </AdminButton>
+            <AdminButton variant="secondary" size="sm">
+              Publiés
+            </AdminButton>
+            <AdminButton variant="secondary" size="sm">
+              Brouillons
+            </AdminButton>
+          </div>
         </div>
-      </div>
+      </AdminCard>
 
       {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Slug
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created At
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredBlogs.map((blog) => (
-                <tr key={blog.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900" title={blog.title}>
-                      {truncateText(blog.title)}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500" title={blog.slug}>
-                      {truncateText(blog.slug)}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <StatusBadge status={blog.status} type="status" />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {blog.created_at ? new Date(blog.created_at).toLocaleDateString() : "N/A"}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex justify-end space-x-2">
-                      <Link
-                        href={`/blogs/${blog.slug}`}
-                        target="_blank"
-                        className="text-gray-600 hover:text-gray-900 p-1"
-                      >
-                        <Eye className="h-5 w-5" />
-                      </Link>
-                      <Link
-                        href={`/admin/blogs/${blog.id}`}
-                        className="text-blue-600 hover:text-blue-900 p-1"
-                      >
-                        <Pencil className="h-5 w-5" />
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(blog.id)}
-                        className="text-red-600 hover:text-red-900 p-1"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {filteredBlogs.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No blog posts found.</p>
+      <AdminTable
+        columns={[
+          {
+            key: 'title',
+            label: 'Titre',
+            render: (value) => <span className="font-medium text-[var(--admin-text-primary)]" title={value}>{truncateText(value)}</span>
+          },
+          {
+            key: 'slug',
+            label: 'Slug',
+            render: (value) => <span className="text-[var(--admin-text-secondary)]" title={value}>{truncateText(value)}</span>
+          },
+          {
+            key: 'status',
+            label: 'Statut',
+            render: (value) => {
+              const variant = value === 'published' ? 'success' : value === 'draft' ? 'warning' : 'info';
+              return <AdminBadge variant={variant}>{value}</AdminBadge>;
+            }
+          },
+          {
+            key: 'created_at',
+            label: 'Créé le',
+            render: (value) => value ? new Date(value).toLocaleDateString() : "N/A"
+          },
+          {
+            key: 'views',
+            label: 'Vues',
+            render: (value) => <span className="text-[var(--admin-text-secondary)]">{value}</span>
+          }
+        ]}
+        data={filteredBlogs}
+        renderActions={(blog) => (
+          <div className="flex justify-end space-x-2">
+            <Link
+              href={`/blogs/${blog.slug}`}
+              target="_blank"
+              className="text-[var(--admin-primary-600)] hover:text-[var(--admin-primary-700)] p-2 rounded-lg hover:bg-[var(--admin-primary-50)] transition-colors"
+            >
+              <Eye className="h-5 w-5" />
+            </Link>
+            <Link
+              href={`/admin/blogs/${blog.id}`}
+              className="text-[var(--admin-primary-600)] hover:text-[var(--admin-primary-700)] p-2 rounded-lg hover:bg-[var(--admin-primary-50)] transition-colors"
+            >
+              <Pencil className="h-5 w-5" />
+            </Link>
+            <AdminButton
+              variant="danger"
+              size="sm"
+              onClick={() => handleDelete(blog.id)}
+              className="p-2"
+            >
+              <Trash2 className="h-4 w-4" />
+            </AdminButton>
           </div>
         )}
-      </div>
+        loading={isLoading}
+      />
 
       {/* Pagination placeholder */}
-      <div className="flex justify-center">
-        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-          <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-            Previous
-          </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-            1
-          </button>
-          <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-            Next
-          </button>
-        </nav>
-      </div>
+      <AdminCard className="mt-6">
+        <div className="flex justify-center">
+          <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+            <AdminButton variant="secondary" size="sm" disabled className="rounded-l-md px-3 py-2">
+              Précédent
+            </AdminButton>
+            <AdminButton variant="primary" size="sm" className="px-4 py-2 border-l-0 border-r-0">
+              1
+            </AdminButton>
+            <AdminButton variant="secondary" size="sm" disabled className="rounded-r-md px-3 py-2 border-l-0">
+              Suivant
+            </AdminButton>
+          </nav>
+        </div>
+      </AdminCard>
     </div>
   );
 }

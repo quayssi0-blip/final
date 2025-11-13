@@ -70,7 +70,7 @@ const BackgroundSlideshow = ({ images, currentIndex }) => {
               alt=""
               fill
               priority={index === 0} // Priority load first image
-              quality={85} // Good balance of quality vs size
+              quality={90} // Updated to match next.config.js default
               sizes="100vw"
               style={{
                 objectFit: "cover",
@@ -100,7 +100,7 @@ const BackgroundSlideshow = ({ images, currentIndex }) => {
  * UnifiedHero Component
  * Enhanced hero section with background image slideshow based on AboutHeader design.
  * Features automatic image transitions, gradient overlay, staggered text animations, decorative icons, and scroll indicator.
- * If no images are provided, randomly selects 10 project images for slideshow.
+ * If no images are provided, randomly selects up to 10 project images for slideshow.
  *
  * @param {string} title - The main heading text
  * @param {string} subtitle - The subtitle text

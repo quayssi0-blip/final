@@ -118,6 +118,7 @@ export default function EditProjectPage() {
       handleDragStart={() => {}}
       handleDragOver={() => {}}
       handleDrop={() => {}}
+      isEditing={true}
     />
   );
 
@@ -276,14 +277,14 @@ export default function EditProjectPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Project</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-[var(--admin-text-primary)]">Edit Project</h1>
+          <p className="text-[var(--admin-text-muted)]">
             Update project information and content
           </p>
         </div>
         <Link
           href="/admin/projects"
-          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-[var(--admin-text-secondary)] hover:bg-gray-50 transition-colors duration-200"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
           Back to Projects
@@ -303,7 +304,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Project Title *
             </label>
@@ -327,7 +328,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="slug"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Slug *
             </label>
@@ -351,7 +352,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="excerpt"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Excerpt *
             </label>
@@ -373,7 +374,7 @@ export default function EditProjectPage() {
 
           {/* Image Upload */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2">
               Image principale du projet
             </label>
             <ImageUpload
@@ -388,7 +389,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="categories"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Categories (comma separated)
             </label>
@@ -407,7 +408,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="start_date"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Start Date
             </label>
@@ -425,7 +426,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Location
             </label>
@@ -444,7 +445,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="people_helped"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Number of People Helped
             </label>
@@ -463,7 +464,7 @@ export default function EditProjectPage() {
           <div>
             <label
               htmlFor="status"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2"
             >
               Status *
             </label>
@@ -483,7 +484,7 @@ export default function EditProjectPage() {
 
           {/* Content Builder */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-[var(--admin-text-secondary)] mb-2">
               Project Content *
             </label>
             <ContentBuilderBlock
@@ -508,7 +509,7 @@ export default function EditProjectPage() {
             <div className="flex space-x-3">
               <Link
                 href="/admin/projects"
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                className="px-4 py-2 border border-gray-300 rounded-lg text-[var(--admin-text-secondary)] hover:bg-gray-50 transition-colors duration-200"
               >
                 Cancel
               </Link>

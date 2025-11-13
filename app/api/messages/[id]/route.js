@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { MessagesController } from "../../../../lib/controllers/messages";
+import supabaseServer from "../../../../lib/supabaseServer";
+import { MessagesController } from "../../../../lib/controllers/messages-fixed";
 
 export async function GET(request, { params }) {
   try {

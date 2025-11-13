@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Mail, Folder, Tag, Rss } from "lucide-react";
+import Image from "next/image";
+import { Mail, Folder, Tag, Rss, Clock, TrendingUp } from "lucide-react";
 
 const SidebarSection = ({ title, icon, children, className = "" }) => (
     <div className={`bg-white rounded-2xl shadow-lg p-6 mb-8 ${className}`}>
@@ -12,7 +13,7 @@ const SidebarSection = ({ title, icon, children, className = "" }) => (
     </div>
 );
 
-const BlogSidebar = ({ categories = [], activeCategory, allBlogs = [], tags = [] }) => {
+const BlogSidebar = ({ categories = [], activeCategory, allBlogs = [], tags = [], currentBlogSlug, currentBlogCategory }) => {
     // Default tags - in real app this would come from props
     const defaultTags = [
         'Solidarité', 'Éducation', 'Santé', 'Environnement',
@@ -45,31 +46,88 @@ const BlogSidebar = ({ categories = [], activeCategory, allBlogs = [], tags = []
         count: realCategoryCounts.find(rc => rc.name === cat)?.count || 0
     })) : realCategoryCounts;
 
+    // Get similar blogs based on category (excluding current blog)
+    const similarBlogs = allBlogs?.filter(blog =>
+        blog.category === currentBlogCategory && blog.slug !== currentBlogSlug
+    ).slice(0, 4) || [];
+
+    // Get trending/popular blogs (simplified: sort by id or add view count later)
+    const trendingBlogs = allBlogs?.sort((a, b) => b.id - a.id).slice(0, 4) || [];
+
     return (
         <div>
-            {/* Newsletter Section - Inspired by the blue section in the inspiration */}
-            <div className="bg-blue-600 rounded-2xl shadow-lg p-6 mb-8 text-white">
-                <h3 className="flex items-center text-xl font-bold mb-4">
-                    <Mail className="w-5 h-5" />
-                    <span className="ml-3">Newsletter</span>
-                </h3>
-                <p className="text-blue-100 mb-4">
-                    Restez informé de nos dernières actions et histoires d'impact.
-                </p>
-                <form className="flex flex-col space-y-3">
-                    <input
-                        type="email"
-                        placeholder="votre.email@example.com"
-                        className="w-full px-4 py-2 rounded-md border-0 text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-blue-300"
-                    />
-                    <button
-                        type="submit"
-                        className="w-full bg-white text-blue-600 font-bold py-2 px-4 rounded-md hover:bg-blue-50 transition-colors duration-200"
-                    >
-                        S'abonner
-                    </button>
-                </form>
-            </div>
+            {/* Similar Blogs Section */}
+            {similarBlogs.length > 0 && (
+                <SidebarSection
+                    title="Articles similaires"
+                    icon={<TrendingUp className="w-5 h-5" />}
+                >
+                    <div className="space-y-4">
+                        {similarBlogs.map(blog => (
+                            <Link
+                                key={blog.id}
+                                href={`/blogs/${blog.slug}`}
+                                className="group block"
+                            >
+                                <div className="flex gap-3">
+                                    {blog.image && (
+                                        <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                            <Image
+                                                src={blog.image}
+                                                alt={blog.title}
+                                                width={64}
+                                                height={64}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="min-w-0 flex-1">
+                                        <h4 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                            {blog.title}
+                                        </h4>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                            {blog.created_at && new Date(blog.created_at).toLocaleDateString('fr-FR', {
+                                                month: 'short',
+                                                day: 'numeric'
+                                            })}
+                                        </p>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </SidebarSection>
+            )}
+
+            {/* Trending Blogs Section */}
+            {trendingBlogs.length > 0 && (
+                <SidebarSection
+                    title="Tendances"
+                    icon={<Clock className="w-5 h-5" />}
+                >
+                    <div className="space-y-3">
+                        {trendingBlogs.slice(0, 5).map(blog => (
+                            <Link
+                                key={blog.id}
+                                href={`/blogs/${blog.slug}`}
+                                className="group flex items-start gap-3"
+                            >
+                                <span className="text-sm font-bold text-gray-400 mt-0.5 flex-shrink-0">
+                                    {trendingBlogs.indexOf(blog) + 1}
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                        {blog.title}
+                                    </h4>
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                        {blog.category}
+                                    </p>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </SidebarSection>
+            )}
 
             {/* Categories Section */}
             <SidebarSection
@@ -99,7 +157,7 @@ const BlogSidebar = ({ categories = [], activeCategory, allBlogs = [], tags = []
                     })}
                 </ul>
             </SidebarSection>
-            
+
             {/* Tags Section */}
             <SidebarSection
                 title="Mots-clés"

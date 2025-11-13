@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AdminStatsCard from "@/components/AdminStatsCard/AdminStatsCard";
+import AdminCard from "@/components/AdminCard/AdminCard";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import Alert from "@/components/Alert/Alert";
 import { MessageCircle, FileText, FolderOpen, User } from "lucide-react";
@@ -90,8 +91,8 @@ export default function AdminDashboard() {
 
   // Fonction pour obtenir l'icône selon le type
   const getActivityIcon = (type, color) => {
-    const iconClass = `h-5 w-5 ${color === 'blue' ? 'text-blue-600' : color === 'green' ? 'text-green-600' : color === 'yellow' ? 'text-yellow-600' : 'text-gray-600'}`;
-    
+    const iconClass = `h-5 w-5 ${color === 'blue' ? 'text-[var(--admin-primary-600)]' : color === 'green' ? 'text-[var(--admin-success)]' : color === 'yellow' ? 'text-[var(--admin-warning)]' : 'text-[var(--admin-text-secondary)]'}`;
+
     switch (type) {
       case 'message':
         return <MessageCircle className={iconClass} />;
@@ -109,103 +110,111 @@ export default function AdminDashboard() {
     switch (status) {
       case 'unread':
       case 'published':
-        return 'bg-green-100 text-green-800';
+        return 'bg-[var(--admin-success)]/10 text-[var(--admin-success)] border border-[var(--admin-success)]/20';
       case 'read':
       case 'draft':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-[var(--admin-bg-secondary)] text-[var(--admin-text-secondary)] border border-[var(--admin-border-light)]';
       case 'replied':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-[var(--admin-primary-50)] text-[var(--admin-primary-700)] border border-[var(--admin-primary-200)]';
       default:
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-[var(--admin-warning)]/10 text-[var(--admin-warning)] border border-[var(--admin-warning)]/20';
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="dashboard-container">
       {/* Affichage de l'erreur */}
-      {error && <Alert type="error" message={`Erreur: ${error}`} />}
+      {error && (
+        <AdminCard className="mb-6">
+          <Alert type="error" message={`Erreur: ${error}`} />
+        </AdminCard>
+      )}
 
       {/* Affichage du chargement */}
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <LoadingSpinner />
-          <span className="ml-3 text-gray-600">
-            Chargement des statistiques...
-          </span>
-        </div>
+        <AdminCard className="mb-6">
+          <div className="flex items-center justify-center py-12">
+            <LoadingSpinner />
+            <span className="ml-3 text-[var(--admin-text-secondary)]">
+              Chargement des statistiques...
+            </span>
+          </div>
+        </AdminCard>
       ) : (
         <>
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-            <AdminStatsCard
-              title="Articles"
-              value={stats.articles}
-              type="articles"
-            />
-            <AdminStatsCard
-              title="Projets"
-              value={stats.projects}
-              type="projects"
-            />
-            <AdminStatsCard
-              title="Messages"
-              value={stats.messages}
-              type="messages"
-            />
-            <AdminStatsCard title="Administrateurs" value={stats.admins} type="admins" />
-          </div>
+          <div className="stats-section mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <AdminStatsCard
+                title="Articles"
+                value={stats.articles}
+                type="articles"
+              />
+              <AdminStatsCard
+                title="Projets"
+                value={stats.projects}
+                type="projects"
+              />
+              <AdminStatsCard
+                title="Messages"
+                value={stats.messages}
+                type="messages"
+              />
+              <AdminStatsCard title="Administrateurs" value={stats.admins} type="admins" />
+            </div>
 
-          {/* Additional Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
-            <AdminStatsCard
-              title="Vues Totales"
-              value={stats.totalViews}
-              type="views"
-            />
-            <AdminStatsCard
-              title="Messages Non Lus"
-              value={stats.unreadMessages}
-              type="unread"
-            />
-            <AdminStatsCard
-              title="Messages Lus"
-              value={stats.readMessages}
-              type="read"
-            />
+            {/* Additional Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+              <AdminStatsCard
+                title="Vues Totales"
+                value={stats.totalViews}
+                type="views"
+              />
+              <AdminStatsCard
+                title="Messages Non Lus"
+                value={stats.unreadMessages}
+                type="unread"
+              />
+              <AdminStatsCard
+                title="Messages Lus"
+                value={stats.readMessages}
+                type="read"
+              />
+            </div>
           </div>
 
           {/* Recent Activity Section */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <AdminCard className="activity-card">
+            <h2 className="text-xl font-bold text-[var(--admin-text-primary)] mb-6">
               Activité Récente
             </h2>
-            <div className="space-y-3">
+            <div className="activity-list">
               {activities.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p>Aucune activité récente</p>
+                <div className="text-center py-12 text-[var(--admin-text-muted)]">
+                  <p className="text-lg">Aucune activité récente</p>
                 </div>
               ) : (
                 activities.map((activity) => (
                   <div
                     key={activity.id}
-                    className="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0"
+                    className="activity-item flex items-center justify-between py-4 border-b border-[var(--admin-border-light)] last:border-b-0 hover:bg-[var(--admin-bg-hover)] transition-colors"
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-4">
                       {getActivityIcon(activity.type, activity.color)}
-                      <div>
-                        <p className="font-medium text-gray-900">
+                      <div className="activity-content">
+                        <p className="font-medium text-[var(--admin-text-primary)] text-base">
                           {activity.title}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-[var(--admin-text-secondary)] mt-1">
                           {activity.description}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-[var(--admin-text-muted)] mt-2">
                           {getTimeAgo(activity.time)}
                         </p>
                       </div>
                     </div>
                     <span
-                      className={`px-2 py-1 text-xs rounded-full ${getStatusColor(
+                      className={`px-3 py-1.5 text-xs font-medium rounded-full ${getStatusColor(
                         activity.status,
                       )}`}
                     >
@@ -220,7 +229,7 @@ export default function AdminDashboard() {
                 ))
               )}
             </div>
-          </div>
+          </AdminCard>
         </>
       )}
     </div>

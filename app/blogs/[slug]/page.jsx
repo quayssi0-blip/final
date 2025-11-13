@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,12 +11,32 @@ import { Calendar, User, Share2, Facebook, Twitter, Linkedin } from "lucide-reac
 import Container from "@/components/Container/Container";
 import BlogHero from "@/components/BlogHero/BlogHero";
 
+import BlogSidebar from "@/components/BlogSidebar/BlogSidebar";
+import BlogCommentsSection from "@/components/BlogCommentsSection/BlogCommentsSection";
+
 export default function BlogPost({ params }) {
   const { slug } = React.use(params);
   const { blogs: allBlogs, isLoading, isError } = useBlogs();
 
   // Find blog by slug
   const blog = allBlogs?.find((b) => b.slug === slug);
+
+  // Increment view count on page load
+  useEffect(() => {
+    if (blog?.id) {
+      fetch(`/api/blogs/${blog.id}/views`, {
+        method: 'POST',
+      })
+        .then((response) => {
+          if (!response.ok) {
+            console.warn('Failed to increment view count');
+          }
+        })
+        .catch((error) => {
+          console.warn('Error incrementing view count:', error);
+        });
+    }
+  }, [blog?.id]);
 
   if (!isLoading && !blog) {
     notFound();
@@ -74,8 +94,7 @@ export default function BlogPost({ params }) {
   };
 
   return (
-    <>
-      {/* Blog Hero Section - Unique for individual blog pages */}
+    <div>
       <BlogHero
         title={blog.title}
         excerpt={blog.excerpt}
@@ -83,14 +102,18 @@ export default function BlogPost({ params }) {
         author={blog.author}
         category={blog.category}
         date={blog.created_at}
-        tags={blog.tags ? blog.tags.split(',') : []}
+        tags={Array.isArray(blog.tags) ? blog.tags : (typeof blog.tags === 'string' && blog.tags ? blog.tags.split(',') : [])}
         onBackUrl="/blogs"
       />
       
-      {/* Main Content Below Hero */}
       <main className="bg-white min-h-screen">
-        <div className="max-w-3xl mx-auto px-6 py-12">
-          <article className="w-full">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="flex flex-col lg:flex-row gap-12">
+            {/* Main Content */}
+            
+          <div className="flex-1 lg:max-w-3xl">
+
+            <article className="w-full">
             {/* Blog Meta Information - simplified for better reading flow */}
             <div className="flex flex-wrap items-center gap-4 md:gap-6 text-sm text-gray-600 mb-12 pb-8 border-b border-gray-200">
               {blog.category && (
@@ -135,7 +158,7 @@ export default function BlogPost({ params }) {
               <div className="mb-8 pb-8 border-b border-gray-200">
                 <h3 className="text-sm font-semibold text-gray-900 mb-3">Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {blog.tags.split(',').map((tag, idx) => (
+                  {(Array.isArray(blog.tags) ? blog.tags : (typeof blog.tags === 'string' && blog.tags ? blog.tags.split(',') : [])).map((tag, idx) => (
                     <Link
                       key={idx}
                       href={`/blogs?tag=${tag.trim()}`}
@@ -250,8 +273,24 @@ export default function BlogPost({ params }) {
               </section>
             )}
           </article>
+
+          {/* Comments Section */}
+          <BlogCommentsSection blogId={blog.id} />
+        </div>
+
+        {/* Sidebar */}
+        <aside className="lg:w-80 lg:sticky lg:top-35 lg:self-start lg:h-fit">
+          <BlogSidebar
+            allBlogs={allBlogs}
+            categories={[]}
+            activeCategory={null}
+            currentBlogSlug={slug}
+            currentBlogCategory={blog.category}
+          />
+        </aside>
+        </div>
         </div>
       </main>
-    </>
+  </div>
   );
 }

@@ -5,6 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
 import { useBlogs } from "../../../../hooks/useBlogs";
+import ImageUpload from "../../../../components/ImageUpload/ImageUpload";
+import AdminButton from "@/components/AdminButton/AdminButton";
+import AdminCard from "@/components/AdminCard/AdminCard";
+import AdminInput from "@/components/AdminInput/AdminInput";
 
 export default function EditBlogPage() {
   const params = useParams();
@@ -20,6 +24,8 @@ export default function EditBlogPage() {
     status: "draft",
     tags: "",
     category: "education",
+    image_url: "",
+    share_on_social: false,
   });
   const [errors, setErrors] = useState({});
 
@@ -37,6 +43,8 @@ export default function EditBlogPage() {
             status: foundBlog.status || "draft",
             tags: foundBlog.tags || "",
             category: foundBlog.category || "education",
+            image_url: foundBlog.image_url || "",
+            share_on_social: foundBlog.share_on_social || false,
           });
         }
         setLoading(false);
@@ -50,10 +58,10 @@ export default function EditBlogPage() {
   }, [params.id, blogs]);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     }));
 
     // Clear error when user starts typing
@@ -79,26 +87,33 @@ export default function EditBlogPage() {
     }
   };
 
+  const handleImageUploaded = (url) => {
+    setFormData((prev) => ({
+      ...prev,
+      image_url: url,
+    }));
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.title.trim()) {
-      newErrors.title = "Title is required";
+      newErrors.title = "Le titre est requis";
     }
 
     if (!formData.slug.trim()) {
-      newErrors.slug = "Slug is required";
+      newErrors.slug = "Le slug est requis";
     } else if (!/^[a-z0-9-]+$/.test(formData.slug)) {
       newErrors.slug =
-        "Slug can only contain lowercase letters, numbers, and hyphens";
+        "Le slug ne peut contenir que des lettres minuscules, des chiffres et des traits d'union";
     }
 
     if (!formData.excerpt.trim()) {
-      newErrors.excerpt = "Excerpt is required";
+      newErrors.excerpt = "L'extrait est requis";
     }
 
     if (!formData.content.trim()) {
-      newErrors.content = "Content is required";
+      newErrors.content = "Le contenu est requis";
     }
 
     setErrors(newErrors);
@@ -156,7 +171,7 @@ export default function EditBlogPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 bg-[var(--admin-primary-600)]"></div>
       </div>
     );
   }
@@ -164,52 +179,49 @@ export default function EditBlogPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Blog Post</h1>
-          <p className="text-gray-600">
-            Update blog post information and content
-          </p>
+      <AdminCard className="page-header-card mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-[var(--admin-text-primary)] mb-2">Modifier l'Article</h1>
+            <p className="text-[var(--admin-text-secondary)] text-lg">Mettez à jour les informations et le contenu de l'article</p>
+          </div>
+          <AdminButton variant="secondary" size="lg" asChild>
+            <Link href="/admin/blogs">
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              Retour aux Articles
+            </Link>
+          </AdminButton>
         </div>
-        <Link
-          href="/admin/blogs"
-          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-        >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to Blogs
-        </Link>
-      </div>
+      </AdminCard>
 
       {/* Form */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <AdminCard>
         <form onSubmit={handleSubmit} className="space-y-6">
           {errors.submit && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-800 text-sm">{errors.submit}</p>
-            </div>
+            <AdminCard className="border-[var(--admin-error)] bg-[var(--admin-error)]/10 mb-6">
+              <p className="text-[var(--admin-error)] text-sm font-medium">{errors.submit}</p>
+            </AdminCard>
           )}
 
           {/* Title */}
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
-              Title *
+              Titre *
             </label>
-            <input
+            <AdminInput
               type="text"
               id="title"
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.title ? "border-red-300" : "border-gray-300"
-              }`}
-              placeholder="Enter blog post title"
+              className={`${errors.title ? "border-[var(--admin-error)]" : ""}`}
+              placeholder="Entrez le titre de l'article"
             />
             {errors.title && (
-              <p className="mt-1 text-sm text-red-600">{errors.title}</p>
+              <p className="mt-1 text-sm text-[var(--admin-error)]">{errors.title}</p>
             )}
           </div>
 
@@ -217,23 +229,21 @@ export default function EditBlogPage() {
           <div>
             <label
               htmlFor="slug"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
               Slug *
             </label>
-            <input
+            <AdminInput
               type="text"
               id="slug"
               name="slug"
               value={formData.slug}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.slug ? "border-red-300" : "border-gray-300"
-              }`}
-              placeholder="blog-post-slug"
+              className={`${errors.slug ? "border-[var(--admin-error)]" : ""}`}
+              placeholder="slug-article-blog"
             />
             {errors.slug && (
-              <p className="mt-1 text-sm text-red-600">{errors.slug}</p>
+              <p className="mt-1 text-sm text-[var(--admin-error)]">{errors.slug}</p>
             )}
           </div>
 
@@ -241,19 +251,19 @@ export default function EditBlogPage() {
           <div>
             <label
               htmlFor="status"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
-              Status *
+              Statut *
             </label>
             <select
               id="status"
               name="status"
               value={formData.status}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
             >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
+              <option value="draft">Brouillon</option>
+              <option value="published">Publié</option>
             </select>
           </div>
 
@@ -261,7 +271,7 @@ export default function EditBlogPage() {
           <div>
             <label
               htmlFor="category"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
               Catégorie *
             </label>
@@ -270,7 +280,7 @@ export default function EditBlogPage() {
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-[var(--admin-border-medium)] rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent"
             >
               <option value="education">Éducation</option>
               <option value="autonomisation">Autonomisation des Femmes</option>
@@ -285,13 +295,43 @@ export default function EditBlogPage() {
             </select>
           </div>
 
+          {/* Share on social media */}
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="share_on_social"
+              name="share_on_social"
+              checked={formData.share_on_social}
+              onChange={handleInputChange}
+              className="h-4 w-4 text-[var(--admin-primary-600)] focus:ring-[var(--admin-primary-500)] border-[var(--admin-border-medium)] rounded"
+            />
+            <label
+              htmlFor="share_on_social"
+              className="ml-2 block text-sm font-medium text-[var(--admin-text-primary)]"
+            >
+              Partager sur les réseaux sociaux
+            </label>
+          </div>
+
+          {/* Image */}
+          <div>
+            <label className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2">
+              Image
+            </label>
+            <ImageUpload
+              currentImage={formData.image_url}
+              onImageUploaded={handleImageUploaded}
+              type="blog-main"
+            />
+          </div>
+
           {/* Excerpt */}
           <div>
             <label
               htmlFor="excerpt"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
-              Excerpt *
+              Extrait *
             </label>
             <textarea
               id="excerpt"
@@ -299,13 +339,13 @@ export default function EditBlogPage() {
               value={formData.excerpt}
               onChange={handleInputChange}
               rows={3}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.excerpt ? "border-red-300" : "border-gray-300"
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent ${
+                errors.excerpt ? "border-[var(--admin-error)]" : "border-[var(--admin-border-medium)]"
               }`}
-              placeholder="Brief description of the blog post"
+              placeholder="Brève description de l'article"
             />
             {errors.excerpt && (
-              <p className="mt-1 text-sm text-red-600">{errors.excerpt}</p>
+              <p className="mt-1 text-sm text-[var(--admin-error)]">{errors.excerpt}</p>
             )}
           </div>
 
@@ -313,18 +353,17 @@ export default function EditBlogPage() {
           <div>
             <label
               htmlFor="tags"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
-              Tags
+              Étiquettes
             </label>
-            <input
+            <AdminInput
               type="text"
               id="tags"
               name="tags"
               value={formData.tags}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="javascript, react, tutorial (comma separated)"
+              placeholder="javascript, react, tutoriel (séparés par des virgules)"
             />
           </div>
 
@@ -332,9 +371,9 @@ export default function EditBlogPage() {
           <div>
             <label
               htmlFor="content"
-              className="block text-sm font-medium text-gray-700 mb-2"
+              className="block text-sm font-medium text-[var(--admin-text-primary)] mb-2"
             >
-              Content *
+              Contenu *
             </label>
             <textarea
               id="content"
@@ -342,55 +381,46 @@ export default function EditBlogPage() {
               value={formData.content}
               onChange={handleInputChange}
               rows={15}
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm ${
-                errors.content ? "border-red-300" : "border-gray-300"
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[var(--admin-primary-500)] focus:border-transparent font-mono text-sm ${
+                errors.content ? "border-[var(--admin-error)]" : "border-[var(--admin-border-medium)]"
               }`}
-              placeholder="Write your blog post content here..."
+              placeholder="Écrivez le contenu de votre article ici..."
             />
             {errors.content && (
-              <p className="mt-1 text-sm text-red-600">{errors.content}</p>
+              <p className="mt-1 text-sm text-[var(--admin-error)]">{errors.content}</p>
             )}
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex justify-between">
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
-            >
+          <div className="flex justify-between pt-6 border-t border-[var(--admin-border-light)]">
+            <AdminButton variant="danger" onClick={handleDelete}>
               <Trash2 className="h-5 w-5 mr-2" />
-              Delete Post
-            </button>
+              Supprimer l'Article
+            </AdminButton>
 
             <div className="flex space-x-3">
-              <Link
-                href="/admin/blogs"
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-              >
-                Cancel
-              </Link>
-              <button
-                type="submit"
-                disabled={saving}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+              <AdminButton variant="secondary" asChild>
+                <Link href="/admin/blogs">
+                  Annuler
+                </Link>
+              </AdminButton>
+              <AdminButton variant="primary" type="submit" disabled={saving}>
                 {saving ? (
                   <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 bg-[var(--admin-text-inverse)] mr-2"></div>
+                    Sauvegarde...
                   </>
                 ) : (
                   <>
                     <Save className="h-5 w-5 mr-2" />
-                    Save Changes
+                    Sauvegarder les Modifications
                   </>
                 )}
-              </button>
+              </AdminButton>
             </div>
           </div>
         </form>
-      </div>
+      </AdminCard>
     </div>
   );
 }

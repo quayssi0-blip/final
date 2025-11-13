@@ -11,18 +11,19 @@ const ImageTextSection = ({
   buttonHref,
   imagePosition = "right",
 }) => (
-  <section className="relative h-full py-16 px-6 overflow-hidden bg-gradient-to-br from-white to-blue-50/30">
-    {/* Subtle background pattern */}
-    <div className="absolute inset-0 opacity-5">
-      <div className="absolute top-10 left-10 w-32 h-32 rounded-full border border-blue-200"></div>
-      <div className="absolute bottom-20 right-20 w-24 h-24 rounded-full border border-blue-200"></div>
-      <div className="absolute top-1/2 left-1/3 w-16 h-16 rounded-full border border-blue-200"></div>
+  <section className="relative h-full py-12 px-6 overflow-hidden bg-gradient-to-br from-white via-blue-50/40 to-indigo-50/30">
+    {/* Enhanced background pattern with better visual hierarchy */}
+    <div className="absolute inset-0 opacity-10 rounded-lg overflow-hidden pointer-events-none">
+      <div className="absolute top-8 left-12 w-40 h-40 rounded-full border-2 border-blue-300/50 bg-blue-100/10"></div>
+      <div className="absolute bottom-16 right-16 w-32 h-32 rounded-full border-2 border-indigo-300/50 bg-indigo-100/10"></div>
+      <div className="absolute top-1/2 left-1/4 w-24 h-24 rounded-full border-2 border-purple-300/50 bg-purple-100/10"></div>
+      <div className="absolute top-1/4 right-1/3 w-16 h-16 rounded-full border-2 border-cyan-300/50 bg-cyan-100/10"></div>
     </div>
 
     <div className="max-w-7xl mx-auto relative">
-      <div className="grid lg:grid-cols-2 gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
         {/* Text Content - Left Side */}
-        <div className="space-y-8 order-1 text-left">
+        <div className="space-y-6 order-1 text-left">
           {/* Section Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 border border-blue-200">
             <span
@@ -34,15 +35,16 @@ const ImageTextSection = ({
           </div>
 
           {/* Main Title */}
-          <div>
-            <h2 className="text-3xl lg:text-4xl font-bold leading-tight text-blue-600">
+          <div className="relative">
+            <h2 className="text-2xl lg:text-4xl font-bold leading-tight text-blue-700 relative z-10">
               {title}
             </h2>
+            <div className="absolute -bottom-1 left-0 w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
           </div>
 
           {/* Subtitle */}
           <div
-            className="text-base leading-relaxed"
+            className="text-sm leading-relaxed"
             style={{ color: "#666666" }}
           >
             {subtitle}
@@ -69,12 +71,11 @@ const ImageTextSection = ({
           <div className="pt-4">
             <a
               href={buttonHref}
-              className="inline-flex items-center px-8 py-4 rounded-full font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-              style={{ backgroundColor: "#6495ED" }}
+              className="inline-flex items-center px-8 py-4 rounded-full font-bold text-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-110 group bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
             >
               {buttonText}
               <svg
-                className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -93,40 +94,29 @@ const ImageTextSection = ({
         {/* Image Section - Right Side */}
         <div className="order-2 flex justify-center lg:justify-end">
           {imageSrc ? (
-            <div className="relative w-full mr-4 max-w-md h-160 rounded-2xl overflow-hidden">
-              {/* Top image - slightly right */}
-              <div className="absolute top-0 right-4 w-3/4 h-5/12 rounded-lg overflow-hidden shadow-lg z-10">
+            <div className="w-full max-w-md">
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-700 hover:scale-105">
+                {/* Enhanced Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-purple-600/20 to-indigo-600/30 z-10 hover:from-blue-700/40 hover:via-purple-700/30 hover:to-indigo-700/40 transition-all duration-500"></div>
+
                 <Image
-                  src={imageSrc[0]}
+                  src={imageSrc}
                   alt={imageAlt || "Image"}
-                  fill
-                  key={0}
-                  style={{ objectFit: "cover" }}
+                  width={600}
+                  height={400}
+                  style={{ objectFit: "cover", width: "100%", height: "auto" }}
+                  className="transition-transform duration-700 hover:scale-110"
                 />
-              </div>
-              {/* Middle image - left */}
-              <div className="absolute top-1/3 left-0 w-3/4 h-5/12 rounded-lg overflow-hidden shadow-lg z-20">
-                <Image
-                  src={imageSrc[1]}
-                  alt={imageAlt || "Image"}
-                  fill
-                  key={1}
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              {/* Bottom image - right */}
-              <div className="absolute top-7/12 right-2 w-3/4 h-5/12 rounded-lg overflow-hidden shadow-lg z-30">
-                <Image
-                  src={imageSrc[2]}
-                  alt={imageAlt || "Image"}
-                  fill
-                  key={2}
-                  style={{ objectFit: "cover" }}
-                />
+
+                {/* Enhanced Border with Glow Effect */}
+                <div className="absolute inset-0 border-2 border-white/30 rounded-2xl pointer-events-none shadow-inner"></div>
+
+                {/* Subtle Inner Shadow */}
+                <div className="absolute inset-0 shadow-inner rounded-2xl pointer-events-none"></div>
               </div>
             </div>
           ) : (
-            <div className="w-full w-3/4 h-80 rounded-2xl bg-gray-200 flex items-center justify-center text-xl font-medium text-gray-500">
+            <div className="w-full h-80 rounded-2xl bg-gray-200 flex items-center justify-center text-xl font-medium text-gray-500 shadow-lg">
               Image Placeholder
             </div>
           )}

@@ -38,17 +38,40 @@ export function useComments(blogId = null) {
    * @param {Object} updatedData - Les données mises à jour
    */
   const updateComment = async (commentId, updatedData) => {
-    const { error: updateError } = await supabaseClient
-      .from('blog_comments')
-      .update(updatedData)
-      .eq('id', commentId);
-    
-    if (updateError) {
-      console.error('Failed to update comment:', updateError);
-      throw new Error('Could not update comment.');
+    try {
+      // Validation côté client
+      if (updatedData.name && updatedData.name.length > 100) {
+        throw new Error('Le nom ne peut pas dépasser 100 caractères.');
+      }
+
+      if (updatedData.message && updatedData.message.length > 1000) {
+        throw new Error('Le message ne peut pas dépasser 1000 caractères.');
+      }
+
+      if (updatedData.email && updatedData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(updatedData.email)) {
+        throw new Error('Format d\'email invalide.');
+      }
+
+      const response = await fetch(`/api/blog-comments/${commentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erreur lors de la mise à jour du commentaire.');
+      }
+
+      const updatedComment = await response.json();
+      mutate(); // Revalidate
+      return updatedComment;
+    } catch (error) {
+      console.error('Failed to update comment:', error);
+      throw error;
     }
-    
-    mutate(); // Revalidate
   };
 
   /**
